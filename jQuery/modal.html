@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>redirect</title>
+</head>
+<body>
+    <script>
+        // 특정 페이지에서 modal창 띄우기
+        // layer popup
+        $(document).ready(function () {
+            // 변수 url에 현재 주소값 대입
+            const url = window.location.href,
+                // 정규식 "/main" 
+                exp = /\/main/;
+            // 해당 값이 있을경우 true 반환
+            exp.test(url);
+            // 해당 값이 true라면 실행 
+            if (exp.test(url) == true) {
+                // modal을 보여준다.
+                $("#div").show();
+            }
+        });
+    </script>
+</body>
+</html>
