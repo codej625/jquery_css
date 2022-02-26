@@ -12,28 +12,98 @@
 </head>
 
 <body>
+    <!-- validation test html -->
     <div>
-        <p>birth_test</p>
-        <input class="inputVal" type="text" value="" maxlength="4">
-        <button class="button">입력</button>
+        <p>validation_test</p>
+        <!-- input value의 type은 text, maxlength는 4로 기준을 정함 -->
+        <input class="inputVal" type="text" value="" maxlength="4" onkeypress="if(event.keyCode == 13){btnFunc()}">
+        <button class="button">생년월일 입력</button>
     </div>
 
 </body>
 <script>
-    // 버튼을 누르면 이벤트 발생
+    // enter input용 script
+    function btnFunc() {
+        const birthYY = document.getElementsByClassName('inputVal')[0].value;
+        valueVaildation(birthYY);
+    };
+
+    // .button click -> click_event run
     $('.button').click(function () {
-        // input value를 가져와 birthYY변수에 값을 대입
+        // .inputVal의 value를 가져와 birthYY변수에 값을 대입
         const birthYY = $('.inputVal').val();
-        // String -> int 형변환
-        parseInt(birthYY);
-        // 형변환 확인
-        alert('형변환 확인->' + birthYY);
-        // 유효성 검사 함수 실행
-        birth(birthYY);
+        // validation function run
+        valueVaildation(birthYY);
     });
 
-    function birth(value) {
+    function valueVaildation(value) {
+        // '' check 
+        if (value.search(/\s/) > -1) {
+            console.log('1-1번');
+            $('.inputVal').val('');
+            alert('공백은 입력할 수 없습니다.');
+            return false;
+        }
+        // length check
+        else if (value.length != 4) {
+            console.log('1-2번');
+            alert('4자리 숫자를 입력해주세요');
+            return false;
+        }
+        // isNaN check
+        else if (isNaN(value)) {
+            console.log('1-3번');
+            $('.inputVal').val('');
+            alert('숫자를 입력해주세요');
+            return false;
+        }
 
+        // birth vaildation function run
+        birthVaildation(value);
+    }
+
+    function birthVaildation(value) {
+        // value substring(0, 2)
+        const birthNumFirst = value.substring(0, 2);
+        // value substring(2, 4)
+        const birthNumSecond = value.substring(2, 4);
+
+        // (birthNumFirst이 19와 같거나 or 20과 같다) or (birthNumFirst이 20보다 크거나 19보다 작다)
+        if ((birthNumFirst == 19 || birthNumFirst == 20) || (birthNumFirst > 20 || birthNumFirst < 19)) {
+            // birthNumFirst이 19 or 20 일때
+            if (birthNumFirst == 19 || birthNumFirst == 20) {
+                // birthNumFirst이 19이면 return true
+                if (birthNumFirst == 19) {
+                    alert('19xx년생 통과');
+                    return true;
+                }
+                // birthNumFirst이 20일때
+                else if (birthNumFirst == 20) {
+                    // 매년 자동으로 현재 나이를 비교하기 위해 Date객체 사용 
+                    // getFullYear()는 4자리 full_year return함
+                    const casting = new Date().getFullYear();
+                    // substring 내장함수를 사용하기 위해 casting
+                    const year = casting.toString();
+                    // input value의 앞 2자리가 20이고 뒷 2자리가 현재년도의 뒷 두자리와 작거나 같으면 return true
+                    if (birthNumSecond <= year.substring(2, 4)) {
+                        alert('20xx년생 통과');
+                        return true;
+                    }
+                    // input value의 앞 2자리가 20이고 뒷 2자리가 현재년도의 뒷 두자리보다 크면 return false
+                    else if (birthNumSecond > year.substring(2, 4)) {
+                        console.log('2-1번');
+                        alert("정확한 생년월일을 입력해주세요");
+                        return false;
+                    }
+                }
+                //  input value의 앞 2자리 19-20 외에 모든 숫자는 return false
+            } else {
+                console.log('2-2번');
+                $('.inputVal').val('');
+                alert("정확한 생년월일을 입력해주세요");
+                return false;
+            }
+        }
     }
 </script>
 
