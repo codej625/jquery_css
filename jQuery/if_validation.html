@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <title>validation</title>
+</head>
+
+<body>
+    <div>
+        <p>birth_test</p>
+        <input class="inputVal" type="text" value="" maxlength="4">
+        <button class="button">입력</button>
+    </div>
+
+</body>
+<script>
+    // 버튼을 누르면 이벤트 발생
+    $('.button').click(function () {
+        // input value를 가져와 birthYY변수에 값을 대입
+        const birthYY = $('.inputVal').val();
+        // String -> int 형변환
+        parseInt(birthYY);
+        // 형변환 확인
+        alert('형변환 확인->' + birthYY);
+        // 유효성 검사 함수 실행
+        birth(birthYY);
+    });
+
+    function birth(value) {
+
+    }
+</script>
+
+</html>
