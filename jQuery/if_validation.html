@@ -72,38 +72,28 @@
 
         // input value의 앞 2자리 19-20 외에 모든 숫자는 return false
         if (birthNumFirst > 20 || birthNumFirst < 19) {
-            console.log('2-1번');
+            console.log('first_logic');
             alert("정확한 생년월일을 입력해주세요");
             return false;
         }
-        // birthNumFirst이 19 or 20 일때
-        else if ((birthNumFirst == 19 || birthNumFirst == 20)) {
-            // birthNumFirst이 19이면 return true
-            if (birthNumFirst == 19) {
-                alert('19xx년생 통과');
-                return true;
-            }
-            // birthNumFirst이 20일때
-            else if (birthNumFirst == 20) {
-                // 매년 자동으로 현재 나이를 비교하기 위해 Date객체 사용 
-                // getFullYear()는 4자리 full_year return함
-                const casting = new Date().getFullYear();
-                // substring 내장함수를 사용하기 위해 casting
-                const year = casting.toString();
-                // input value의 앞 2자리가 20이고 뒷 2자리가 현재년도의 뒷 두자리와 작거나 같으면 return true
-                if (birthNumSecond <= year.substring(2, 4)) {
-                    alert('20xx년생 통과');
-                    return true;
-                }
-                // input value의 앞 2자리가 20이고 뒷 2자리가 현재년도의 뒷 두자리보다 크면 return false
-                else if (birthNumSecond > year.substring(2, 4)) {
-                    console.log('2-2번');
-                    alert("정확한 생년월일을 입력해주세요");
-                    return false;
-                }
+        // birthNumFirst이 20일때
+        else if (birthNumFirst == 20) {
+            // 매년 자동으로 현재 나이를 비교하기 위해 Date객체 사용 
+            // getFullYear()는 4자리 full_year return함
+            const casting = new Date().getFullYear();
+            // substring 내장함수를 사용하기 위해 casting
+            const year = casting.toString();
+            // input value의 앞 2자리가 20이고 뒷 2자리가 현재년도의 뒷 두자리보다 크면 return false
+            if (birthNumSecond > year.substring(2, 4)) {
+                console.log('second_logic');
+                alert("정확한 생년월일을 입력해주세요");
+                return false;
             }
         }
+        alert('통과');
+        return true;
     }
+
 </script>
 
 </html>
