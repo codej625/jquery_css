@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <label for="cookieSave">쿠키 저장</label>
+    <input type="text" id="cookieSave">
+    <input type="button" value="쿠키저장" id="saveBtn"><br>
+    <label for="cookieLoad">쿠키 호출</label> 
+    <input type="text" id="cookieLoad"> 
+    <input type="button" value="쿠키불러오기" id="loadBtn"> 
+    <input type="button" value="쿠키삭제" id="deleteBtn">
+</body>
+
+<script>
+    $(function () {
+        // #saveBtn click
+        $("#saveBtn").click(function () {
+            // 변수 cookie_value에 #cookieSave의 value 대입
+            var cookie_value = $("#cookieSave").val();
+            // 'cookie'라는 key값으로 입력값을 저장
+            // parameter 1 -> cookie name
+            // parameter 2 -> save value
+            $.cookie('cookie', cookie_value);
+        });
+        // #loadBtn click
+        $("#loadBtn").click(function () {
+            // 변수 cookie_value에 key값 'cookie'을 찾아 대입
+            var cookie_value = $.cookie('cookie');
+            // #cookieLoad의 input value에 cookie_value 변수에 값을 대입
+            $("#cookieLoad").val(cookie_value);
+        });
+        // #deleteBtn click
+        $("#deleteBtn").click(function () {
+            // 'cookie' 라는 key값의 쿠키를 삭제
+            $.removeCookie("cookie");
+        });
+    });
+/*
+$.cookie('key값','value',{
+                            expires : 10
+                            ,domain : 'www.naver.com'
+                            ,secure : false
+                        });
+*/
+/*
+    expires : 쿠키를 저장하는 기간 (10이면 10일동안 쿠키정보를 저장)
+    path    : 쿠키경로 설정
+    domain  : 쿠키를 저장할 도메인 (defalut -> 지정안할시 호출한 url의 domain이 됨)
+    secure  : https url에 사용을 하고자 한다면 true 
+*/
+</script>
+
+</body>
+
+</html>
