@@ -1,0 +1,15 @@
+/* import */
+@import url("https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css");
+
+/* init */
+body { font-family: 'Spoqa Han Sans Neo', 'sans-serif'; }
+img { max-width: 100%; }
+
+/* main Info Slider */
+.info-slider { display: flex; justify-content: space-between; padding-left:100px; padding-right: 150px; }
+.info-slider > div > .slider-ul { margin: 0; }
+.info-slider > div > .slider-ul > .slider-li { margin-bottom: 30px; cursor: pointer ;}
+.info-slider > div > .slider-ul > .slider-li > div { display: flex; justify-content: space-between; align-items: center; padding: 40px 25px; background: #e7e7e7; }
+.info-slider > div > .slider-ul > .slider-li h3 { color:#64b5ae; font-size: 28px; margin: 0; letter-spacing: -0.75px; }
+.info-slider > div > .slider-ul > .slider-li p { color: #646464; font-size: 20px; margin: 10px 0 0; letter-spacing: -0.75px; }
+.info-slider > div > .slider-ul > .slider-li.active > div { background: #646464 }
