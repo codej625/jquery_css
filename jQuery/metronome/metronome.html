@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .main {
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <title>metronome</title>
+</head>
+
+<body>
+    <div class="main">
+        <div>
+            <h1 style="text-align: center;">metronome</h1>
+            <div class="simple_counter">
+                <div class="display">
+                    <div class="bpm"></div>
+                </div>
+                <div>
+                    <input id="range_id" type="range" value="1" min="1" max="300" step="1" oninput="bpmRange();">
+                    <input type="range">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function(){
+            $('.bpm').html('1');
+        });
+        function bpmRange() {
+            let bpm = $('#range_id').val();
+            $('.bpm').html(bpm);
+        }
+     </script>
+</body>
+
+</html>
