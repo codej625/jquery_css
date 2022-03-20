@@ -44,7 +44,20 @@
         function bpmRange() {
             let bpm = $('#range_id').val();
             $('.bpm').html(bpm);
+
+
+            if(){
+                setInterval(metronome,);
+            }else{
+                clearInterval();
+
+            }
         }
+        function metronome(){
+            var audio = new Audio('./sound.wav');
+            audio.play();
+        }
+
      </script>
 </body>
 
