@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- datatables css-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <!-- datatables js(jquery)-->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <title>dataTables</title>
+</head>
+<body>
+    <script>
+    // 1) table의 id를 지정한다. 
+    // ex) 
+        <table id="example"></table>
+    
+    // 2) 제이쿼리를 사용하여 적용할 테이블의 id를 가져와 예시처럼 사용한다.
+    // ex) 
+        $(function(){
+            $("#example").dataTable(); 
+        });
+        // .dataTable()는 제이쿼리 오브젝트를 반환한다. 
+        // .DataTable()는 DataTable의 API 오브젝트가 반환값이 된다.
+
+    // 3) 기본 옵션 설명
+    // ex)
+        $("#example").dataTable({
+            lengthChange: false,                            // 표시 건수기능 10, 25, 50. 100단위로 표시
+            searching: false,                               // 출력된 표에서 검색기능을 추가
+            ordering: false,                                // 정렬기능 (열을 오름차순, 내림차순으로 정렬)
+            info: false,                                    // 표시건수 등 여러 정보를 표시
+            paging: false,                                  // 페이징 기능
+            scrollX: true,                                  // 가로 스크롤바 표시
+            scrollY: 100,           // ex) 100              // 세로 스크롤바 표시 설정값은 px단위
+            order: [ [ 1, "asc" ] ] // ex) [ [ 1, "asc" ] ] // 열번호, 정렬방법 ex) 2번째 항목을 오름 차순으로 정렬 index는 0부터시작
+            
+	        ,columnDefs: [                     // 열 넓이 설정
+		            { targets: 1, width: 100 } // ex) 2번째 항목 넓이를 100px로 설정
+	        ]                                  // 정해진 번호를 설정    -> targets: 0     
+        });                                    // 복수 사용시 배열 이용 -> targets: [0, 1, 2]
+                                               // 설정한 클래스명 설정  -> targets: "name-column"
+    </script>
+</body>
+</html>
