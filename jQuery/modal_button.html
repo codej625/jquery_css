@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <style>
+        #code-modal>.container>.modal-table>.close { margin-right: 9px; text-align: right; font-size: 40px; color: rgb(73, 73, 73); }
+        .container { display: flex; justify-content: center; align-items: center; }
+        .modal-table { border: 1px solid black; text-align: center; }
+        .modal-table table { width: 500px; padding-bottom: 15px; }
+    </style>
+    <title>modal</title>
+</head>
+
+<body>
+    <button id="modal-btn" value="1">코드</button>
+    <div id="code-modal" class="table" style="display: none;">
+        <div class="container">
+            <div class="modal-table">
+                <table class="code-table">
+                </table>
+                <div class="close">X</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function code() {
+            // db와 연동시 backend 작업 필요 간단하게 array로 예시
+            const array = [
+                '<tr><th>STATUS</th><th>PRODUCT</th><th>CAMPAIGN</th><th>OLD_CODE</th><th>NEW_CODE</th><tr>'
+                // life 종신보험
+                , '<tr><td>LIVE</td><td>종신보험</td><td>life</td><td></td><td></td></tr>'
+                , '<tr><td></td><td>종신보험</td><td>life</td><td></td><td></td></tr>'
+                // dental 치아보험                
+                , '<tr><td>LIVE</td><td>치아보험</td><td>dental</td><td></td><td></td></tr>'
+                , '<tr><td></td><td>치아보험</td><td>dental</td><td></td><td></td></tr>'
+                // child 어린이보험
+                , '<tr><td>LIVE</td><td>어린이보험</td><td>child</td><td></td><td></td></tr>'
+                , '<tr><td></td><td>어린이보험</td><td>child</td><td></td><td></td></tr>'
+                // dementia2 치매건강보험
+                , '<tr><td>LIVE</td><td>치매건강보험</td><td>dementia2</td><td></td><td></td></tr>'
+                // easyok 간편건강보험
+                , '<tr><td>LIVE</td><td>간편건강보험</td><td>easyok</td><td></td><td></td></tr>'
+                , '<tr><td></td><td>간편건강보험</td><td>easyok</td><td></td><td></td></tr>'
+                , '<tr><td></td><td>간편건강보험</td><td>easyok</td><td></td><td></td></tr>'
+                // health 통합보험
+                , '<tr><td>LIVE</td><td>통합보험</td><td>health</td><td></td><td></td></tr>'
+                , '<tr><td></td><td>통합보험</td><td>health</td><td></td><td></td></tr>'
+                // onlycancer 비갱신암보험
+                , '<tr><td>LIVE</td><td>비갱신암보험</td><td>onlycancer</td><td></td><td></td></tr>'
+                // cancer 암보험
+                , '<tr><td>LIVE</td><td>암보험</td><td>cancer</td><td></td><td></td></tr>'
+                , '<tr><td></td><td>암보험</td><td>cancer</td><td></td><td></td></tr>'
+                // recancer 갱신형암보험
+                , '<tr><td>OFF</td><td>갱신형암보험</td><td>recancer</td><td></td><td></td></tr>'
+                // 3d 암보험(3대질병)
+                , '<tr><td>OFF</td><td>암보험(3대질병)</td><td>3d</td><td></td><td></td></tr>'
+                // hospitalize 간편입원보험  
+                , '<tr><td>OFF</td><td>간편입원보험</td><td>hospitalize</td><td></td><td></td></tr>'
+                // dementia 치매보험
+                , '<tr><td>OFF</td><td>치매보험</td><td>dementia</td><td></td><td></td></tr>'
+                // easy 초간편건강보험
+                , '<tr><td>OFF</td><td>초간편건강보험</td><td>easy</td><td></td><td></td></tr>'
+                , '<tr><td>OFF</td><td>초간편건강보험</td><td>easy</td><td></td><td></td></tr>'
+                // accident 상해보험
+                , '<tr><td>OFF</td><td>상해보험</td><td>accident</td><td></td><td></td></tr>'
+                , '<tr><td>OFF</td><td>상해보험</td><td>accident</td><td></td><td></td></tr>'
+                , '<tr><td>OFF</td><td>상해보험</td><td>accident</td><td></td><td></td></tr>'
+            ];
+            $('.code-table').empty();
+                for (idx in array) {
+                    $('.code-table').append(array[idx]);
+            };
+        }
+        $('#modal-btn').on('click', function () {
+            let inputVal = $('#modal-btn').val();
+            if (inputVal == 1) {
+                $('#modal-btn').val('0');
+                $('#code-modal').show();
+                code();
+            } else {
+                $('#modal-btn').val('1');
+                $('#code-modal').hide();
+            }
+        });
+        $('.close').on('click', function () {
+            $('#code-modal').hide();
+        });
+    </script>
+</body>
+
+</html>
