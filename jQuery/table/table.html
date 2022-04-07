@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <title>table</title>
+
+    <style>
+        .recive{
+            border: 1px solid #e6e6e6;
+        }
+        .star{
+            color: #e6e6e6;
+            font-size: 18px;
+        }
+        .star-yellow{
+            color: #f4b400;
+            font-size: 18px;
+        }
+        .container{
+            margin: 0 auto;
+            width: 1200px;
+        }
+        .nav{
+            display: flex;
+            background-color: #fff;
+            height: 100px;
+            align-items: center;
+            border-bottom: 1px solid #e6e6e6;
+            
+        }
+        .nav-icon{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 500px;
+        }
+        .icon{
+            text-align: center;
+        }
+        .main-logo{
+            width: 200px; 
+            margin: 0 120px 0 200px; 
+            font-size: 30px;
+            color: #3c3c3ccd;
+        }
+        .table.table-hover{
+            float: right;
+        }
+        ul > li {
+            margin: 30px;
+        }
+   
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <div class="main-logo">DAMOWARE</div>
+        <div class="nav-icon">
+            <div class="icon"><img src="./img/time.png"><div>근태관리</div></div>
+            <div class="icon"><img src="./img/schedule.png"><div>일정관리</div></div>
+            <div class="icon"><img src="./img/board.png"><div>게시판</div></div>
+            <div class="icon"><img src="./img/work.png"><div>업무관리</div></div>
+            <div class="icon"><img src="./img/mail.png"><div>메일</div></div>
+            <div class="icon"><img src="./img/erp.png"><div>전자결제</div></div>
+        </div>
+    </div>
+    <div class="container">
+        <div style="float: left; width: 280px;">
+            <div style="display: inline-block; margin: 20px 10px 20px 10px; padding: 10px 15px; border: solid 1px #e6e6e6;">메일쓰기</div> 
+            <div style="display: inline-block; margin: 20px 10px 20px 10px; padding: 10px 15px; border: solid 1px #e6e6e6;">내게쓰기</div>
+            <div>
+                <ul style="list-style: none;">
+                    <li>전체메일함</li>
+                    <li>받은메일함</li>
+                    <li>보낸메일함</li>
+                    <li>삭제된메일함</li>
+                </ul>
+            </div>
+        </div>
+        
+     
+        <div style="display: inline-block;">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>받은메일함</th>
+                        <th>보낸 날짜</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input type="checkbox">
+                            <span class="star">☆</span> 임명호 부장</td>
+                        <td><span class="recive">받은메일함</span> 입사를 축하합니다.</td>
+                        <td>21-08-24 12:46</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox">
+                            <span class="star">☆</span> 김지윤 차장</td>
+                        <td><span class="recive">받은메일함</span> 입사 축하드려요~</td>
+                        <td>21-08-22 12:45</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox">
+                            <span class="star-yellow">★</span> 박경원 대리</td>
+                        <td><span class="recive">받은메일함</span> 안녕하세요 박경원 대리입니다.</td>
+                        <td>21-08-21 14:15</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox">
+                            <span class="star">☆</span> 엄준식 대리</td>
+                        <td><span class="recive">받은메일함</span> 엄준식 대리 입니다.</td>
+                        <td>21-08-21 13:11</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox">
+                            <span class="star-yellow">★</span> 조준호 차장</td>
+                        <td><span class="recive">받은메일함</span> 경영지원팀 조준호 차장입니다.</td>
+                        <td>21-08-20 16:21</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox">
+                            <span class="star">☆</span> 김영삼 대리</td>
+                        <td><span class="recive">받은메일함</span> 안녕하세요 경영2팀 김영상 대리입니다.</td>
+                        <td>21-08-18 17:42</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox">
+                            <span class="star">☆</span> 김춘삼 대리</td>
+                        <td><span class="recive">받은메일함</span> 안녕하세요 경영2팀 김춘삼 대리입니다.</td>
+                        <td>21-08-18 17:42</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox">
+                            <span class="star">☆</span> 강감찬 부장</td>
+                        <td><span class="recive">받은메일함</span> 입사를 축하드립니다.</td>
+                        <td>21-08-16 18:22</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox">
+                            <span class="star-yellow">★</span> 박동호 실장</td>
+                        <td><span class="recive">받은메일함</span> 반갑습니다. 박동호 실장입니다.</td>
+                        <td>21-08-15 11:31</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox">
+                            <span class="star">☆</span> 이준홍 부장</td>
+                        <td><span class="recive">받은메일함</span> 안녕하세요 이준홍 부장입니다.</td>
+                        <td>21-08-15 12:30</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="text-align: center;">[1] [2]</div>
+        </div>
+    </div>
+
+    <script>
+
+
+    </script>
+</body>
+</html>
