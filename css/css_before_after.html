@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>css</title>
+    <style>
+        .before::before{
+            content: "before는 앞에 붙음";
+            color: red
+        }
+        .after::after{
+            content: "after는 뒤에 붙음";
+            color: blue    
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>1. ::before, ::after 의 차이점</h1>
+        <div>
+            <strong>
+                ::before - 선택한 element(s) 앞에 가상 콘텐츠 삽입<br>
+                ::after - 선택한 element(s)s 뒤에 가상 콘텐츠 삽입
+            </strong>
+        </div>
+        <div>
+            <p class="before">before 예시</p>
+            <p class="after">after 예시</p>
+            <p class="before after">before/after 같이 사용할 때 예시</p>
+        </div>    
+        <h1>2. content ?</h1>
+        <div>
+            가상 요소 before/after를 사용할 때 꼭 같이 사용되는 속성 content<br>
+            content = "";<br>
+            HTML에는 존재하지 않고 CSS에서만 존재하는 가상(가짜)요소<br>
+            가상 요소이기 때문에 javascript로 제어하기 힘듬<br>
+            content 값에 텍스트(특수문자 포함), 이미지 등을 넣어 CSS만으로 가상 요소를 추가 가능
+        </div>
+    </div>
+</body>
+</html>
