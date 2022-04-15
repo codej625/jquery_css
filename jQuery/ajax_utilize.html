@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ajax</title>
+</head>
+
+<body>
+    <script>
+        // sendData 객체 생성
+        let sendData = {};
+        // url_ex
+        const sendUrl = 'test';
+        // #submit_form 이라는 id값을 가진 form의 값을 가져옴
+        const form = $("#submit_form");
+
+        // 객체 형식으로 값을 대입  form.find() 함수를 사용하여 name이 user_name인 태그속 value를 찾음
+        sendData['name']     = form.find('[name="user_name"]').val();
+        sendData['birthday'] = form.find('[name="user_birth"]').val();
+        sendData['gender']   = form.find('[name="gender"]:checked').val();
+
+        // ajax 비동기 처리
+        $.ajax({
+            url: sendUrl,
+            type: "post",
+            dataType: "json",
+            data: sendData,
+            async: false,
+            success: function (result) {
+                // 통신 성공시 수행 될 로직
+            },
+            error: function (e) {
+                // 통신 실패시 수행 될 로직
+                alert("error");
+            }
+        });
+    </script>
+</body>
+
+</html>
