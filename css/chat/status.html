@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>list</title>
+    <style>
+        .container {
+            margin: 0 auto;
+            padding: 0 15px;
+            max-width: 1200px;
+            display: flex;
+            justify-content: center;
+        }
+        .table_box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 100px;
+            border-top: 3px solid #3c3c3ccd;
+            border-bottom: 3px solid #3c3c3ccd;
+            border-radius: 5px;
+            width: 300px;
+        }
+        .table_box > table {
+            background-color: #fff;
+        }
+        .table_box > table th {
+            background-color: #e6e6e6;
+            border-radius: 5px 5px 0 0;
+            height: 50px;
+            padding-left: 10px;
+            text-align: center;
+            color: #3c3c3ccd;
+        }
+        .table_box > table td {
+            border-top: 1px solid #e6e6e6;
+            border-bottom: 1px solid #e6e6e6;
+            background-color: #e6e6e6;
+            border-radius: 0 0 5px 5px;
+            width: 300px;
+            padding: 10px 10px;
+            text-align: left;
+            color: #3c3c3ccd;
+        }
+        .table_icon_on {
+            display: flex;
+            align-items: center;
+        }
+        .table_icon_on > img {
+            width: 25px;
+            margin-right: 10px;
+        }
+        .table_icon_on > .left_close {
+            width: 25px;
+            margin-left: 160px;
+            border-radius: 5px;
+            font-size: 15px;
+            background-color: #6c757d;
+            border: solid 1px;
+            color: #fff;
+        }
+        .chat_message {
+            overflow-y: scroll;
+            margin-bottom: 10px;
+            height: 250px;
+        }
+        .chat_content{
+            background-color: #fff;
+            border-radius: 5px;
+            height: 100px;
+            font-size: 13px;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="table_box">
+            <table>
+                <tr>
+                    <th>
+                        <span class="table_icon_on"><img img src="./img/icon_on.png">임준홍 <span class="left_close">X</span></span>
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="chat_message">
+                            <div style="font-size: 13px;">
+                                <b style="color: #3c3c3ccd; margin-left: 3px;">임준홍</b>
+                                <div style="border: solid 1px; border-radius: 3px; background-color: #fff; max-width: 150px; margin-top: 5px; font-size: 12px; padding: 5px 10px;">
+                                    안녕하세요<br>
+                                    이주호 대리님
+                                </div>
+                            </div>
+                            <div style="font-size: 13px; margin-top: 5px;">
+                                <b style="color: #3c3c3ccd; margin-left: 3px;">임준홍</b>
+                                <div style="border: solid 1px; border-radius: 3px; background-color: #fff; max-width: 150px; margin-top: 5px; font-size: 12px; padding: 5px 10px;">
+                                    오늘 점심 어떠세요?
+                                </div>
+                            </div>
+                            <div style="font-size: 13px; float: right; margin: 0 10px;">
+                                <div style="margin: 5px 0 5px 110px;"><b>이주호</b></div>
+                                <div style="border: solid 1px; border-radius: 3px; background-color: #fff; width: 130px; font-size: 12px; padding: 5px 10px;">
+                                    <div style="text-align: right;">
+                                        그럼 혹시 차돌된장찌개<br>
+                                        괜찮으신가요? &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat_content" style="border: solid 1px; padding-top: 5px;">
+                            &nbsp;&nbsp;메세지를 입력해 주세요.
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>
