@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mouse over</title>
+    <!-- jQuery cdn -->
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <style>
+        .container {
+            text-align: center;
+            max-width: 200px;
+            margin: 0 auto;
+        }
+        .container > div {
+            position: relative;
+        }
+        .container > div > div:first-child {
+            background-color: blue;
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            color: #fff;
+            display: none;
+            opacity: 0.5;
+        }
+        .container > div > div:first-child > div:first-child {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+        .container > div > div:nth-child(2) {
+            background-color: red;
+            width: 200px;
+            height: 200px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="over">
+            <div class="veil">
+                <div>purple</div>
+            </div>
+            <div>color</div>
+        </div>
+    </div>
+</body>
+<script>
+    // mouse over
+    $('.over').mouseenter(function () {
+        $('.veil').css('display', 'block');
+    });
+    $('.over').mouseleave(function () {
+        $('.veil').css('display', 'none');
+    });
+</script>
+</html>
