@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>position</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+
+        .container {
+            margin: 0 auto;
+            text-align: center;
+            width: 300px;
+            height: 1000px;
+        }
+
+        .container > div {
+            margin-top: 100px;
+        }
+
+        .container > div > div:nth-child(1) {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #3399ff;
+            height: 100px;
+            left: 100px;
+            /* 
+                static 위치 기준으로 움직임
+            */
+        }
+
+        .container > div > div:nth-child(2) > div {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: black;
+            color: #fff;
+            opacity: 0.8;
+            width: 100px;
+            height: 100px;
+            /* margin: 0 auto; */
+            /* 
+                relative position을 가진 상위요소를 기준으로 움직임 
+                즉 absolute를 사용하면 relative로 지정된 박스를 중심으로 위치가 조절되는 것이 되므로 
+                자신의 상위에 위치한 박스를 대상으로 상대적으로 위치가 조정되므로 여러방면에서 유용하다.
+            */
+            left: 10px;
+        }
+
+        .container > div > div:nth-child(3) {
+            position: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #cc5200;
+            height: 100px;
+            /*
+                scroll시 바로 알 수 있음
+            */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div>
+            <div>first</div>
+            <div style="position: relative; height: 100px; width: 100px; background-color: #19ce60;">
+                <div>second</div>
+            </div>
+            <div>third</div>
+        </div>
+    </div>
+</body>
+
+</html>
