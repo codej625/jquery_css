@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>move</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <style>
+        #click {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto;
+            text-align: center;
+            background-color: black;
+            font-size: 20px;
+            color: #fff;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #click:hover {
+            color: red;
+            background-color: silver;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <div id="click">Click Me</div>
+    </div>
+
+    <script>
+        // 전역변수 선언
+        let num = 0;
+
+        $('#click').mouseover(function () {
+            // 지역변수 선언
+            let randomNum = Math.round(Math.random() * 800 + 1);
+            if (num == 0) {
+                $('#click').offset({ top: randomNum, left: randomNum });
+                num = 1;
+            } else {
+                $('#click').offset({ left: randomNum });
+                num = 0;
+            }
+        });
+        // click시 alert창
+        $('#click').click(function () {
+            alert('감히?')
+        });
+    </script>
+</body>
+
+</html>
