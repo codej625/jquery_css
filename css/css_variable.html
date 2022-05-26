@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>variable</title>
+    <style>
+        .one {
+            color: white;
+            background-color: brown;
+            margin: 10px;
+            width: 50px;
+            height: 50px;
+            display: inline-block;
+        }
+        .two {
+            color: white;
+            background-color: black;
+            margin: 10px;
+            width: 150px;
+            height: 70px;
+            display: inline-block;
+        }
+        .three {
+            color: white;
+            background-color: brown;
+            margin: 10px;
+            width: 75px;
+        }
+        .four {
+            color: white;
+            background-color: brown;
+            margin: 10px;
+            width: 100px;
+        }
+        .five {
+            background-color: brown;
+        }
+    </style>
+    <style>
+        :root {
+            --main-bg-color: brown;
+        }
+        .one {
+            color: white;
+            background-color: var(--main-bg-color);
+            margin: 10px;
+            width: 50px;
+            height: 50px;
+            display: inline-block;
+        }
+        .two {
+            color: white;
+            background-color: black;
+            margin: 10px;
+            width: 150px;
+            height: 70px;
+            display: inline-block;
+        }
+        .three {
+            color: white;
+            background-color: var(--main-bg-color);
+            margin: 10px;
+            width: 75px;
+        }
+        .four {
+            color: white;
+            background-color: var(--main-bg-color);
+            margin: 10px;
+            width: 100px;
+        }
+        .five {
+            background-color: var(--main-bg-color);
+        }
+    </style>
+</head>
+
+<body>
+</body>
+
+</html>
