@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>combinators</title>
+</head>
+<body>
+    <!-- html ex) -->
+    <div class="main">
+        <h1>hello</h1> <!-- 자식 -->
+        <div>          <!-- 자식 -->
+            <h2>hello</h2> <!-- 손자 <= 자식 선택자로 선택 불가능 -->
+        </div>
+    </div>
+    <!-- 
+        css ex01)
+        스페이스 = 하위 선택자
+        .main p { color: red; } 
+        <h1>, <h2>태그 속 hello가 전부 red 색상 적용 
+    -->
+
+    <!-- 
+        css ex02)
+        꺽쇠 = 자식 선택자 
+        .main > p { color: red; } 
+        <h1>태그 속 hello만 red 색상 적용 
+    -->
+
+</body>
+</html>
