@@ -1,0 +1,22 @@
+/* font-family */
+@font-face { font-family: 'GmarketSansLight'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff') format('woff'); font-weight: normal; font-style: normal; }
+
+/* body 초기화 */
+body           { margin: 0; padding: 0; }
+
+.container     { max-width: 1920px; }
+.content       { position: relative; }
+.content > img { position: absolute; }
+
+header > .container > div:nth-child(1)         { height: 360px;  display: flex; justify-content: center; background: url('./image/1920px/pc1920_01.jpg'); background-position: center; }
+main > section > .container > div:nth-child(1) { height: 865px;  display: flex; justify-content: center; background: url('./image/1920px/pc1920_02.jpg'); background-position: center; }
+main > section > .container > div:nth-child(2) { height: 293px;  display: flex; justify-content: center; background: url('./image/1920px/pc1920_03.jpg'); background-position: center; }
+main > section > .container > div:nth-child(3) { height: 1068px; display: flex; justify-content: center; background: url('./image/1920px/pc1920_04.jpg'); background-position: center; }
+main > section > .container > div:nth-child(4) { height: 294px;  display: flex; justify-content: center; background: url('./image/1920px/pc1920_05.jpg'); background-position: center; }
+main > section > .container > div:nth-child(5) { height: 965px;  display: flex; justify-content: center; background: url('./image/1920px/pc1920_06.jpg'); background-position: center; }
+main > section > .container > div:nth-child(6) { height: 619px;  display: flex; justify-content: center; background: url('./image/1920px/pc1920_07.jpg'); background-position: center; }
+
+/* 해당 class or tag만 font 적용 */
+.font_test {
+  font-family: 'GmarketSansLight' !important;
+}
