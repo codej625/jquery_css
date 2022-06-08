@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>layer_over</title>
+  <style>
+    .mouse-hover>div {
+      position: relative;
+    }
+
+    .layer_over {
+      position: absolute;
+      word-break: keep-all;
+      padding: 15px;
+      top: 0px;
+      left: 0px;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      box-sizing: border-box;
+      opacity: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div clsss="mouse_over">
+    <div class="layer_over">
+      <p>text</p>
+      <div>text</div>
+    </div>
+    <img src="/img/xxx.jpg" alt="xxx">
+  </div>
+  <div class="">name</div>
+  </div>
+  <script>
+    $(".mouse-hover").mouseover(function () {
+      $(this).find('.layer_over').stop().animate({
+        opacity: 1
+      }, 100);
+    });
+    $(".mouse-hover").mouseleave(function () {
+      $(this).find('.layer_over').stop().animate({
+        opacity: 0
+      }, 100);
+    });
+  </script>
+</body>
+
+</html>
