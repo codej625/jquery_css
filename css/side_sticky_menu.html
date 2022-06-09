@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>sticky</title>
+  <style>
+    
+    /* 
+      미디어 쿼리를 사용하여 최대가 1800px 이하일때 작동
+      min-width는 최소가 1800px 이상일때 작동 
+    */
+    @media screen and (max-width: 1800px) {
+      #sticky_menu {
+        display: none;
+      }
+    }
+
+    #sticky_menu {
+      position: absolute;
+      top: 160px;
+      right: 350px;
+      text-align: center;
+      z-index: 100;
+    }
+
+    #sticky_menu>div {
+      position: fixed;
+      height: 302px;
+      width: 150px;
+      background: #fff;
+      border-radius: 15px;
+    }
+
+    #sticky_menu>div>div>a>span {
+      font-weight: 500;
+      font-size: 13px;
+    }
+
+    #sticky_menu>div>div>a>p {
+      font-weight: 600;
+      font-size: 21px;
+      color: #dc3501;
+      padding-top: 2px;
+    }
+
+    #sticky_menu>div>div:nth-child(1) {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 600;
+      font-size: 23px;
+      height: 60px;
+      width: 150px;
+      background: #dc3501;
+      border-top-right-radius: 15px;
+      border-top-left-radius: 15px;
+      color: #fff;
+    }
+
+    #sticky_menu>div>div:nth-child(2) {
+      width: 130px;
+      height: 80px;
+      margin: 0 auto;
+      padding-top: 19px;
+    }
+
+    #sticky_menu>div>div:nth-child(3) {
+      border-top: #dcdcdc solid 1px;
+      height: 80px;
+      width: 130px;
+      margin: 0 auto;
+      padding-top: 17px;
+    }
+
+    #sticky_menu>div>div:nth-child(4) {
+      border-top: #dcdcdc solid 1px;
+      height: 80px;
+      width: 130px;
+      margin: 0 auto;
+      padding-top: 15px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="sticky_menu" th:fragment="sticky_menu">
+    <div>
+      <div>
+        <p>추천 상품</p>
+      </div>
+      <div>
+        <a class="side_menu_01" href="@">
+          <span>xxx</span>
+          <p>암보험</p>
+        </a>
+      </div>
+      <div>
+        <a class="side_menu_02" href="@">
+          <span>xxx</span><br>
+          <p>간보험</p>
+        </a>
+      </div>
+      <div>
+        <a class="side_menu_03" href="@">
+          <span>xxx</span><br>
+          <p>자동차보험</p>
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
