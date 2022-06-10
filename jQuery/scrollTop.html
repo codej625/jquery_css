@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- jQuery CDN -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <title>scroll</title>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    .container {
+      height: 2500px;
+    }
+
+    .fix_btn {
+      display: none;
+      background-color: black;
+      position: fixed;
+      /* 바닥에 붙어있게 bottom 값을 0을 준다. */
+      bottom: 0;
+      width: 100%;
+      height: 100px;
+    }
+
+    .fix_inner {
+      margin: 0 auto;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="fix_btn">
+      <a href="@" target="_blank">
+        <div class="fix_inner">
+          scroll test
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    $(function () {
+      $(window).scroll(function () {
+        var nowScroll = $(window).scrollTop();
+        console.log(nowScroll)
+        if (nowScroll < 50) {
+          $(".fix_btn").css({
+            display: "none"
+          });
+        } else {
+          $(".fix_btn").css({
+            display: "block"
+          });
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
