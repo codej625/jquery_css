@@ -1,9 +1,9 @@
 $(function () {
   var body = '#wrap > div > div > div';
   $(body).mouseenter(function () {
-    $(this).find('.img').show();
+    $(this).find('.text').show();
   });
   $(body).mouseleave(function () {
-    $(this).find('.img').hide();
+    $(this).find('.text').hide();
   });
 });
