@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>background</title>
+  <style>
+    .shadow {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100vh;
+      display: none;
+    }
+  </style>
+</head>
+
+<div id="popup_stay" class="popup_outer" style="display:none;">
+  <div class="pop_banner">
+    <a href="#" target="_blank">
+      <img src="#" alt="" class="layer_popup_img">
+    </a>
+    <button class="pop_close_bk"><span>닫기</span></button>
+  </div>
+</div>
+
+<script>
+  // kakao popup button
+  $('.kakao_pop_close').on('click', function () {
+    e.preventDefault();
+    $(this).parents(".popup_outer").hide();
+    $(".shadow").hide();
+  });
+
+  // layer popup click close
+  $(document).click(function (e) {
+    if (e.target.className == "popup_outer") {
+      $(".popup_outer").hide();
+    }
+  });
+
+  // layer popup
+  $(document).ready(function () {
+    // 변수 url에 현재 주소값 대입
+    let url = window.location.href
+    // 정규식 "/main" 
+    exp = /\/main/;
+    exp2 = /campaign=특정값/;
+    // 해당 값이 있을경우 true 반환
+    if (exp2.test(url)) {
+      $("#popup_stay").hide();
+    }
+    // 해당 값이 true라면 실행 
+    else if (exp.test(url) == true) {
+      // layer_popup을 보여준다.
+      $(".shadow").show();
+      $("#popup_stay").show();
+    }
+  });
+</script>
+</body>
+
+</html>
