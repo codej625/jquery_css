@@ -1,0 +1,28 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  padding: 0 15px;
+  height: 2000px;
+}
+
+.banner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid black;
+}
+
+.banner>div {
+  position: relative;
+}
+
+.banner>div>div {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 10px;
+}
