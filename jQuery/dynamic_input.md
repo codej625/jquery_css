@@ -28,7 +28,7 @@ $(function() {
 			alert(param)
 			$.ajax({
 				type: 'POST',
-				url: '/sapi/lotte/insu/refund',
+				url: '/url',
 				data: param,
 				dataType: 'text',
 				contentType: 'application/x-www-form-urlencoded',
