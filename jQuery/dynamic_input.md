@@ -18,11 +18,17 @@
 
 ```javascript
 $(function() {
+	// escaping
 	var url = decodeURIComponent(window.location.href);
+	// 필요한 parameter
 	var seq = url.substring(52, 59);
+	// button click event
 	$("#refund").click(function() {
+		// true or false를 위한 confirm
 		var ask = confirm("기존에 페이지 텍스트가 등록되어 있는경우 삭제된 후, 업로드한 텍스트로 변경됩니다. 정말 텍스트를 등록하시겠습니까?");
+		// ture일시 실행
 		if (ask) {
+			// form속에 input 값을 직렬화해서 가져온후 fseq값을 붙임
 			var param = $('#refund-form').serialize();
 			param += seq;
 			alert(param)
@@ -51,7 +57,7 @@ $(function() {
 			alert('upload를 취소하셨습니다.')
 		}
 	})
-
+  // input 입력창 추가 로직
 	$("#add-refund").click(function() {
 		var box = document.getElementById("text-add");
 		var newP = document.createElement('p');
@@ -59,8 +65,9 @@ $(function() {
 		box.appendChild(newP);
 	});
 });
-
+// 추가 => 제거 버튼 obj => this
 function remove(obj) {
+  // id 'refund-text'를 찾아서 삭제한 노드 참조 반환 (부모 노드)
 	document.getElementById('text-add').removeChild(obj.parentNode);
 };
 ```
