@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8">
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+		integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+	<title>chart</title>
+</head>
+
+<body>
+	<div class="container-fluid">
+		<div class="card" id="card-01">
+			<div class="card-body">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item">MPLANIT</li>
+					<li class="breadcrumb-item">자동차보험</li>
+					<li class="breadcrumb-item active" aria-current="page">트래픽
+						모니터링</li>
+				</ol>
+				<div class="row">
+					<div class="col-8">
+						<form id="direct-car-form">
+							<div class="date-calc">
+								<input type="date" id="dateStart" name="dateStart" value="" /> <input type="date" id="dateEnd"
+									name="dateEnd" value="" /> <select name="advertiser">
+									<option value="1">현대해상</option>
+									<option value="2">캐롯</option>
+								</select> <input id="direct-car-calc-btn" class="btn btn-secondary" type="submit" value="조건검색" />
+							</div>
+						</form>
+						<table class="table table-hover table-bordered text-center">
+							<thead>
+								<tr class="table-secondary">
+									<th>NO</th>
+									<th>광고주</th>
+									<th>매체사</th>
+									<th>유입 TOTAL</th>
+									<th>전환 TOTAL</th>
+									<th>전환 상세</th>
+								</tr>
+							</thead>
+							<tbody class="tbody-01">
+
+							</tbody>
+						</table>
+					</div>
+					<div class="col-4">
+						<div style="border: 1px solid #e9ecef;">
+							<canvas id="myChart" style="text-align: center; height: 294px; width: 100%"></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card" id="card-02">
+			<div class="card-body">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item">MPLANIT</li>
+					<li class="breadcrumb-item">자동차보험</li>
+					<li class="breadcrumb-item active" aria-current="page">트래픽
+						모니터링</li>
+				</ol>
+				<div class="row">
+					<div class="col-8">
+						<table class="table table-hover table-bordered text-center">
+							<thead>
+								<tr class="table-secondary">
+									<th>NO</th>
+									<th>광고주</th>
+									<th>매체사</th>
+									<th>유입 TOTAL</th>
+									<th>전환 TOTAL</th>
+									<th>전환 상세</th>
+								</tr>
+							</thead>
+							<tbody class="tbody">
+
+							</tbody>
+						</table>
+					</div>
+					<div class="col-4">
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		//====================================================================
+		// test용 array
+		// var tableHi = [
+		// 	{ 'campaign_seq': , 'COUNT(campaign_seq)':, 'COUNT(adv_result_params)': },
+		// 	{ 'campaign_seq': , 'COUNT(campaign_seq)':, 'COUNT(adv_result_params)': },
+		// 	{ 'campaign_seq': , 'COUNT(campaign_seq)':, 'COUNT(adv_result_params)': },
+		// 	{ 'campaign_seq': , 'COUNT(campaign_seq)':, 'COUNT(adv_result_params)': },
+		// 	{ 'campaign_seq': , 'COUNT(campaign_seq)':, 'COUNT(adv_result_params)': },
+		// 	{ 'campaign_seq': , 'COUNT(campaign_seq)':, 'COUNT(adv_result_params)': },
+		// 	{ 'campaign_seq': , 'COUNT(campaign_seq)':, 'COUNT(adv_result_params)': },
+		// 	{ 'campaign_seq': , 'COUNT(campaign_seq)':, 'COUNT(adv_result_params)': },
+		// ];
+		// var tableCarrot = [
+		// 	{ 'campaign_seq': , 'COUNT(campaign_seq)':, 'COUNT(adv_result_params)': },
+		// 	{ 'campaign_seq': , 'COUNT(campaign_seq)':, 'COUNT(adv_result_params)': },
+		// 	{ 'campaign_seq': , 'COUNT(campaign_seq)':, 'COUNT(adv_result_params)': },
+		// 	{ 'campaign_seq': , 'COUNT(campaign_seq)':, 'COUNT(adv_result_params)': },
+		// 	{ 'campaign_seq': , 'COUNT(campaign_seq)':, 'COUNT(adv_result_params)': },
+		// 	{ 'campaign_seq': , 'COUNT(campaign_seq)':, 'COUNT(adv_result_params)': },
+		// 	{ 'campaign_seq': , 'COUNT(campaign_seq)':, 'COUNT(adv_result_params)': },
+		// 	{ 'campaign_seq': , 'COUNT(campaign_seq)':, 'COUNT(adv_result_params)': },
+		// ]
+		//====================================================================
+		// 'db data 전송' back-end => front-end
+		var defaultTable = /*[[${data}]]*/'default';
+		// 'switching'을 하기 위한 정수 타입 변수
+		var defaultKey = /*[[${defaultKey}]]*/'default';
+		// table값이 대입된 변수
+		var htmlTable = "";
+		// '캐롯'으로 데이터를 바꾸기 위한 array
+		var carrotData = [10, 16, 17, 9, 12, 13];
+		// '현대해상'으로 데이터를 바꾸기 위한 array
+		var hiData = [6, 7, 8, 11, 14];
+		//====================================================================
+		// default table을 만들기 위한 함수
+		function tableList(data, array) {
+			data.forEach(function (item, index) {
+				// board no를 표시하기 위한 변수
+				var number = 0;
+				var idx = item['campaign_seq'];
+				console.log(item['campaign_seq'])
+				switch (idx) {
+					case array[0]: (item['campaign_seq'] == 10) ? number = 2 : number = 1; item['campaign_seq'] = 'TDM'; break;
+					case array[1]: (item['campaign_seq'] == 16) ? number = 5 : number = 2; item['campaign_seq'] = 'MPLANIT'; break;
+					case array[2]: (item['campaign_seq'] == 17) ? number = 6 : number = 3; item['campaign_seq'] = 'NBT'; break;
+					case array[3]: (item['campaign_seq'] == 9) ? number = 1 : number = 4; item['campaign_seq'] = 'TNK'; break;
+					case array[4]: (item['campaign_seq'] == 12) ? number = 3 : number = 5; item['campaign_seq'] = 'IVE'; break;
+					case array[5]: number = 4; item['campaign_seq'] = 'BLOG'; break;
+					default: return false; break;
+				}
+				htmlTable += '<tr><td>' + number + '</td>';
+				htmlTable += '<td>' + '현대해상' + '</td>';
+				htmlTable += '<td>' + item['campaign_seq'] + '</td>';
+				htmlTable += '<td>' + item['COUNT(campaign_seq)'] + '</td>';
+				htmlTable += '<td>' + item['COUNT(adv_result_params)'] + '</td>';
+				htmlTable += '<td></td></tr>';
+			});
+			// 데이터를 가공후 tbody속에 값을 대입
+			$('.tbody-01').html(htmlTable);
+		}
+		// table 함수 실행
+		if (defaultKey) {
+			tableList(defaultTable, carrotData);
+		} else {
+			tableList(defaultTable, carrotData);
+		}
+		//====================================================================
+		// date 형식을 만들기 위한 함수
+		function dateFormat(today) {
+			var year = today.getFullYear();
+			var month = ('0' + (today.getMonth() + 1)).slice(-2);
+			var day = ('0' + today.getDate()).slice(-2);
+			var dateString = year + '-' + month + '-' + day;
+			return dateString;
+		}
+		//====================================================================
+		// input calendar의 기본값을 설정하기 위한 셋팅 
+		var today = new Date();
+		var day = dateFormat(today);
+		$('#dateEnd').val(day);
+		$('#dateStart').val(day);
+		//====================================================================
+		$('#direct-car-calc-btn').click(
+			function (e) {
+				// submit시 동작 중지
+				e.preventDefault();
+				// form속에 input 값을 직렬화해서 가져옴
+				var _params = $('#direct-car-form').serialize();
+				// 리소스 관리를 위해 front-end단에서 data 가공
+				var array = _params.split('&');
+				array[0] = array[0] + ' 00:00:00&';
+				array[1] = array[1] + ' 23:59:59&';
+				// 가공된 array를 담기 위한 변수 와 forEach함수
+				var params = '';
+				array.forEach(function (item) {
+					params += item;
+				});
+				// 참고 log 곧 삭제예정
+				console.log('array => ' + array)
+				console.log('/kb/auto/list_chart_data.sdo?' + params)
+				// 가공된 데이터를 back-end단으로 비동기 전송
+				$.ajax({
+					type: 'get',
+					url: '/kb/auto/list_chart_data.sdo?' + params,
+					beforeSend: function (xmlHttpRequest) {
+						var csrfToken = $('meta[name="_csrf"]').attr('content');
+						var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+						// csrf 처리 (인증)
+						xmlHttpRequest.setRequestHeader(csrfHeader, csrfToken);
+					},
+					success: function (res) {
+						// response data check
+						console.log(res)
+						console.log('조회 성공')
+					},
+					error: function (XMLHttpRequest, textStatus, errorThrown) {
+						console.log('textStatus =>', textStatus)
+						alert('서버에 문제가 발생하였습니다. 다시 시도해주세요');
+					}
+				});
+			});
+		//====================================================================
+		// chart 관련
+		const ctx = document.getElementById('myChart').getContext('2d');
+		; const myChart = new Chart(ctx, {
+			type: 'bar',
+			data: {
+				labels: ['TDM', 'MPLANIT', 'NBT', 'TNK', 'IVE'],
+				datasets: [{
+					label: 'CARROT_CAR_DIRECT',
+					data: [12, 19, 3, 5, 2, 3],
+					backgroundColor: [
+						'rgba(179, 183, 187, 0.2)',
+						'rgba(179, 183, 187, 0.2)',
+						'rgba(179, 183, 187, 0.2)',
+						'rgba(179, 183, 187, 0.2)',
+						'rgba(179, 183, 187, 0.2)'
+					],
+					borderColor: [
+						'rgba(179, 183, 187, 1)',
+						'rgba(179, 183, 187, 1)',
+						'rgba(179, 183, 187, 1)',
+						'rgba(179, 183, 187, 1)',
+						'rgba(179, 183, 187, 1)'
+					],
+					borderWidth: 1
+				}]
+			},
+			options: {
+				responsive: false,
+				scales: {
+					y: {
+						beginAtZero: true
+					}
+				}
+			}
+		});
+		/*]]>*/
+	</script>
+</body>
+
+</html>
