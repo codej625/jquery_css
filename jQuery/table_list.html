@@ -24,256 +24,372 @@
 <title>chart</title>
 </head>
 <body>
-  <div class="container-fluid">
-    <div class="card" id="card-01">
-      <div class="card-body">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">MPLANIT</li>
-          <li class="breadcrumb-item">CAR</li>
-          <li class="breadcrumb-item active" aria-current="page">TRAFFIC MONITORING</li>
-        </ol>
-        <div class="row">
-          <div class="col-8">
-            <form id="date-calc-form" action="/kb/auto/list_table.sdo" method="get">
-              <div class="date-calc">
-                <div class="adv-name">
-                
-                </div>
-                <div>
-                  <input type="date" id="dateStart" name="dateStart" value="" /> 
-                  <input type="date" id="dateEnd" name="dateEnd" value="" /> 
-                  <select name="advertiser">
-                    <option value="">SELECT</option>
-                    <option value="0">현대해상</option>
-                    <option value="1">캐롯</option>
-                  </select> 
-                  <input class="dateKey" type="hidden" name="setDateKey" value="0" />
-                  <input class="btn btn-secondary" type="submit" value="기간설정" />
-                  <input class="btn btn-secondary refresh" type="button" onclick="refresh();" value="새로고침" />
-                </div>
-              </div>
-            </form>
-            <table class="table table-hover table-bordered text-center">
-              <thead>
-                <tr class="table-secondary">
-                  <th>NO</th>
-                  <th>광고주</th>
-                  <th>매체사</th>
-                  <th>유입 TOTAL</th>
-                  <th>전환 TOTAL</th>
-                  <th>전환 상세</th>
-                </tr>
-              </thead>
-              <tbody class="tbody-01">
-
-              </tbody>
-            </table>
-          </div>
-          <div class="col-4">
-            <div style="border: 1px solid #e9ecef;">
-              <canvas id="myChart" style="text-align: center; height: 294px; width: 100%"></canvas>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="card" id="card-02">
-      <div class="card-body">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">MPLANIT</li>
-          <li class="breadcrumb-item">BLOG</li>
-          <li class="breadcrumb-item active" aria-current="page">TRAFFIC MONITORING</li>
-        </ol>
-        <div class="row">
-          <div class="col-8">
-            <table class="table table-hover table-bordered text-center">
-              <thead>
-                <tr class="table-secondary">
-                  <th>NO</th>
-                  <th>광고주</th>
-                  <th>BLOGGER</th>
-                  <th>유입 TOTAL</th>
-                  <th>전환 TOTAL</th>
-                </tr>
-              </thead>
-              <tbody class="tbody-02">
-                
-              </tbody>
-            </table>
-          </div>
-          <div class="col-4">
-            
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <script th:inline="javascript">
-		/*<![CDATA[*/
-		//*전역변수 선언부*======================================================
-  		// 모든 매체사의 데이터가 담긴 변수
-  		var tableData = /*[[${tableData}]]*/'default';
-  		// blog(17) 데이터가 담긴 변수
-  		var blogData = /*[[${blogData}]]*/'default';
-  		// 'switching'을 하기 위한 변수
-  		var switchingKey = /*[[${switchingKey}]]*/'default';
-  		// 기간 설정을 하기 위한 변수
-  		var setDate = /*[[${setDate}]]*/'default';
-  		// date가 변경되었는지 확인 하기 위한 변수
-  		var setDateKey = /*[[${setDateKey}]]*/'default';
-  		// traffic table을 만들어 담기 위한 변수
-  		var trafficTable = '';
-  		// blog table을 만들어 담기 위한 변수
-  		var blogTable = '';
-  		// '현대해상'으로 데이터를 바꾸기 위한 array
-  		var hiData = [6, 7, 8, 11, 14];
-  		// '캐롯'으로 데이터를 바꾸기 위한 array
-  		var carrotData = [9, 10, 12, 13, 16, 17];
-  		// board no를 표시하기 위한 변수
-  		var number = 1;
-  		// calendar의 기본값을 설정하기 date객체와 변수
-  		var today = new Date();
-  		var day = dateFormat(today);
-  		// chart 이름과 값을 변경하기 위한 변수
-  		var chart = [];
-  		var chartName = '';
-  		// traffic total을 순서대로 담기 위한 변수
-  		var trafficTotal = [];
-  	//*조건 선언부*=========================================================
-  		// test
-			blogList(blogData, '캐롯');
-  		// 현대해상 or 캐롯 data switching / function parameter(data, campaign, advertiser)
-  		if (switchingKey === 0) {
-  			tableList(tableData, hiData, '현대해상');
-  			$('.adv-name').text('[ 현대해상 ]');
-  			// chart가 만들어질때 필요한 변수
-  	 		var chart = ['TDM', 'MPLANIT', 'NBT', 'TNK', 'IVE'];
-	  		var chartName = '현대해상 유입률';
-  		} else {
-  			tableList(tableData, carrotData, '캐롯');
-  			$('.adv-name').text('[ 캐롯 ]');
-  			var chart = ['NBT', 'TDM', 'TNK', 'IVE', 'MPLANIT', 'BLOG'];
-	  		var chartName = '캐롯 유입률';
-	  		// canvas태그의 height를 변경한다.
-	  		$('#myChart').height(343);
-  		}
-  		// setDateKey가 0(default)이면 calendar의 시작과 끝을 today로 지정
-  		if (setDateKey === 0) {
-    		$('#dateStart').val(day);
-  			$('#dateEnd').val(day);
-  			// back-end에서 사용되는 key => setDateKey이름으로 front-end단으로 보내짐
-  			$('.dateKey').val(1);
-  		// setDateKey가 1이면 calendar의 시작과 끝을 back-end 서버에서 넘겨온 값으로 대입
-  		} else {
-    		$('#dateStart').val(setDate['dateStart'].substring(0, 10));
-  			$('#dateEnd').val(setDate['dateEnd'].substring(0, 10));
-  			// back-end value(0) => front-end value(1) => back-end value(1) => front-end value(1)...
-  			$('.dateKey').val(1);
-  		}
-		//*함수 선언부*=========================================================
-  		// table을 만들기 위한 함수
-  		function tableList(data, array, advertiser) {
-  			data.forEach(function(item, index) {
-  				// data에 key값을 array속에 index값과 맞추어 switch문 실행
-  				var idx = item['campaign_seq'];
-  				// 테이블의 표시를 위해 객체 속 'campaign_seq'라는 key를 찾아 매체사 이름 대입
-  				switch (idx) {
-  					// 배열을 순서대로 돌리기 때문에 idx에 의해 변경되는 이름을 삼항연산자로 조건수행
-  					case array[0]:(idx===6)?item['campaign_seq']='TDM':item['campaign_seq']='NBT';break;
-  					case array[1]:(idx===7)?item['campaign_seq']='MPLANIT':item['campaign_seq']='TDM';break;
-  					case array[2]:(idx===8)?item['campaign_seq']='NBT':item['campaign_seq']='TNK';break;
-  					case array[3]:(idx===11)?item['campaign_seq']='TNK':item['campaign_seq']='IVE';break;
-  					case array[4]:(idx===14)?item['campaign_seq']='IVE':item['campaign_seq']='MPLANIT';break;
-  					case array[5]:item['campaign_seq']='BLOG';break;
-  					default: return false; break;
-  				}
-  				// table 생성
-  				trafficTable += '<tr><td>' + number + '</td>';
-  				trafficTable += '<td>' + advertiser + '</td>';
-  				trafficTable += '<td>' + item['campaign_seq'] + '</td>';
-  				trafficTable += '<td>' + item['COUNT(campaign_seq)'] + '</td>';
-  				trafficTable += '<td>' + item['COUNT(adv_result_params)'] + '</td>';
-  				trafficTable += '<td></td></tr>';
-    			//  chart에 사용할 traffic total을 담은 array
-  				trafficTotal.push(item['COUNT(campaign_seq)']);
-  				// for문이 반복될때마다 +1씩 증가
-  				number++;
-  			});
-  			// 첫번째(.tbody-01) 테이블에 table 값을 대입
-  			$('.tbody-01').html(trafficTable);
-  		}
-			// test
-  		function blogList(data, advertiser) {
+	<div class="container-fluid">
+	  <div class="card" id="card-01">
+		<div class="card-body">
+		  <ol class="breadcrumb">
+			<li class="breadcrumb-item">TRAFFIC MONITORING</li>
+			<li class="breadcrumb-item active" aria-current="page">CAMPAIGN</li>
+		  </ol>
+		  <div class="row">
+			<div class="col-8">
+			  <form id="date-calc-form" action="/kb/auto/list_table.sdo" method="get">
+				<div class="date-calc">
+				  <div class="adv-name">
+				  
+				  </div>
+				  <div>
+					<input type="date" id="dateStart" name="dateStart" value="" /> 
+					<input type="date" id="dateEnd" name="dateEnd" value="" /> 
+					<select name="advertiser">
+					  <option value="">SELECT</option>
+					  <option value="0">현대해상</option>
+					  <option value="1">캐롯</option>
+					</select> 
+					<input class="dateKey" type="hidden" name="setDateKey" value="0" />
+					<input class="btn btn-secondary" type="submit" value="기간설정" />
+					<input class="btn btn-secondary refresh" type="button" onclick="refresh();" value="새로고침" />
+				  </div>
+				</div>
+			  </form>
+			  <table class="table table-hover table-bordered text-center">
+				<thead>
+				  <tr class="table-secondary">
+					<th>NO</th>
+					<th>광고주</th>
+					<th>매체사</th>
+					<th>유입 TOTAL</th>
+					<th>전환 TOTAL</th>
+					<th colspan="3">전환 상세</th>
+				  </tr>
+				</thead>
+				<tbody class="tbody-01">
+  
+				</tbody>
+			  </table>
+			</div>
+			<div class="col-4">
+			  <div class="chart-name">[ TRAFFIC CHART ]</div>
+			  <div>
+				<canvas id="myChart" style="text-align: center; height: 294px; width: 100%"></canvas>
+			  </div>
+			</div>
+		  </div>
+		</div>
+	  </div>
+	  <div class="card" id="card-02">
+		<div class="card-body">
+		  <ol class="breadcrumb">
+			<li class="breadcrumb-item">TRAFFIC MONITORING</li>
+			<li class="breadcrumb-item active" aria-current="page">VIRAL</li>
+		  </ol>
+		  <div class="row">
+			<div class="col-6">
+			  <div class="blog-name">[ BLOG ]</div>
+			  <table class="table table-hover table-bordered text-center">
+				<thead>
+				  <tr class="table-secondary">
+					<th>NO</th>
+					<th>광고주</th>
+					<th>BLOGGER</th>
+					<th>유입 TOTAL</th>
+					<th>전환 TOTAL</th>
+				  </tr>
+				</thead>
+				<tbody class="tbody-02">
+				  
+				</tbody>
+			  </table>
+			</div>
+			<div class="col-6">
+			  <div class="vr-name">[ VIRAL ]</div>
+			  <table class="table table-hover table-bordered text-center">
+				<thead>
+				  <tr class="table-secondary">
+					<th>NO</th>
+					<th>광고주</th>
+					<th>VIRAL</th>
+					<th>유입 TOTAL</th>
+					<th>전환 TOTAL</th>
+				  </tr>
+				</thead>
+				<tbody class="tbody-03">
+				  
+				</tbody>
+			  </table>
+			</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<script th:inline="javascript">
+		  /*<![CDATA[*/
+		  //*전역변수 선언부*======================================================
+			// 모든 매체사의 데이터가 담긴 변수
+			var tableData = /*[[${tableData}]]*/'default';
+			// blog(17) 데이터가 담긴 변수
+			var blogData = /*[[${blogData}]]*/'default';
+			// vr(17) 데이터가 담긴 변수
+			var vrData = /*[[${vrData}]]*/'default';
+			// 'switching'을 하기 위한 변수
+			var switchingKey = /*[[${switchingKey}]]*/'default';
+			// 기간 설정을 하기 위한 변수
+			var setDate = /*[[${setDate}]]*/'default';
+			// date가 변경되었는지 확인 하기 위한 변수
+			var setDateKey = /*[[${setDateKey}]]*/'default';
+			// adv total값을 담기위한 변수
+			var advTotal = /*[[${advTotal}]]*/'default';
+			// campaign table을 만들어 담기 위한 변수
+			var trafficTable = '';
+			// blog table을 만들어 담기 위한 변수
+			var blogTable = '';
+			// vr table을 만들어 담기 위한 변수
+			var vrTable = '';
+			// '현대해상'으로 데이터를 바꾸기 위한 array
+			var hiData = [6, 7, 8, 11, 14];
+			// '캐롯'으로 데이터를 바꾸기 위한 array
+			var carrotData = [9, 10, 12, 13, 16, 17];
+			// calendar의 기본값을 설정하기 date객체와 변수
+			var today = new Date();
+			var day = dateFormat(today);
+			// chart 이름과 값을 변경하기 위한 변수
+			var chart = [];
+			var chartName = '';
+			// traffic total을 순서대로 담기 위한 변수
+			var trafficTotal = [];
+			
+		//*조건 선언부*=========================================================
+			// blog Table
+			  blogList(blogData, '캐롯');
+			  // vr Table
+			  vrList(vrData, '캐롯');
+			// 현대해상 or 캐롯 data switching / function parameter(data, campaign, advertiser)
+			if (switchingKey === 0) {
+				tableList(tableData, hiData, '현대해상');
+				$('.adv-name').text('[ 현대해상 ]');
+				// chart가 만들어질때 필요한 변수
+				 var chart = ['TDM', 'M-APP', 'NBT', 'TNK', 'IVE'];
+				var chartName = '현대해상 유입률';
+			} else {
+				tableList(tableData, carrotData, '캐롯');
+				$('.adv-name').text('[ 캐롯 ]');
+				var chart = ['NBT', 'TDM', 'TNK', 'IVE', 'M-APP', 'VIRAL'];
+				var chartName = '캐롯 유입률';
+				// canvas태그의 height를 변경한다.
+				$('#myChart').height(343);
+			}
+			// setDateKey가 0(default)이면 calendar의 시작과 끝을 today로 지정
+			if (setDateKey === 0) {
+			  $('#dateStart').val(day);
+				$('#dateEnd').val(day);
+				// back-end에서 사용되는 key => setDateKey이름으로 front-end단으로 보내짐
+				$('.dateKey').val(1);
+			// setDateKey가 1이면 calendar의 시작과 끝을 back-end 서버에서 넘겨온 값으로 대입
+			} else {
+			  $('#dateStart').val(setDate['dateStart'].substring(0, 10));
+				$('#dateEnd').val(setDate['dateEnd'].substring(0, 10));
+				// back-end value(0) => front-end value(1) => back-end value(1) => front-end value(1)...
+				$('.dateKey').val(1);
+			}
+			
+		  //*함수 선언부*=========================================================
+			// campaign Table을 만들기 위한 함수
+			function tableList(data, array, advertiser) {
+				  // board no를 표시하기 위한 변수
+				var number = 1;
+				  // ArrayList<Object> = List<HashMap<String, String>> 형식으로 받은 데이터를 가공하여 담기 위한 변수
+				  var advArray = [];
+				  // back-end에서 넘어온 데이터가 array > array > object 형식으로 담겨 있기 때문에 for문을 중첩하여 사용하여 데이터를 읽어온다.
+			  for (var i = 0; i < advTotal.length; i++) {
+				  for(var j = 0; j < advTotal[i].length; j++) {
+					  // 원하는 데이터값을 배열속에 넣는다.
+					  advArray.push(advTotal[i][j]);
+				}
+			  }
+				data.forEach(function(item, index) {
+					// data에 key값을 array속에 index값과 맞추어 switch문 실행
+					var idx = item['campaign_seq'];
+					
+					// advArray속에 데이터를 담기 위한 두가지 array
+					  var advValue = [];
+					  var advCount = [];
+					  // advArray의 길이만큼 반복하며 조건에 맞는 데이터를 array속에 담는다.
+					  for(var i = 0; i < advArray.length; i++) {
+						  if (advArray[i]['campaign_seq'] === item['campaign_seq']) {
+					   // advValue.push(advArray[i]['adv_result_params']);
+							  advCount.push(advArray[i]['COUNT(adv_result_params)']);
+						  }
+				}
+					  // 전환 상세 표시를 위한 값을 조건문으로 변경
+					var _test = (advCount[0] === 0 || undefined)? 'ㅡ' : advCount[0];
+					var test2 = (advCount[1] ===      undefined)? 'ㅡ' : advCount[1];
+					var test3 = (advCount[2] ===      undefined)? 'ㅡ' : advCount[2];
+					// 테이블의 표시를 위해 객체 속 'campaign_seq'라는 key를 찾아 매체사 이름 대입
+					switch (idx) {
+						// 배열을 순서대로 돌리기 때문에 idx에 의해 변경되는 이름을 삼항연산자로 조건수행
+						case array[0] : (idx===6)  ? item['campaign_seq']='TDM'   : item['campaign_seq']='NBT';   break;
+						case array[1] : (idx===7)  ? item['campaign_seq']='M-APP' : item['campaign_seq']='TDM';   break;
+						case array[2] : (idx===8)  ? item['campaign_seq']='NBT'   : item['campaign_seq']='TNK';   break;
+						case array[3] : (idx===11) ? item['campaign_seq']='TNK'   : item['campaign_seq']='IVE';   break;
+						case array[4] : (idx===14) ? item['campaign_seq']='IVE'   : item['campaign_seq']='M-APP'; break;
+						case array[5] :                                             item['campaign_seq']='VIRAL'; break;
+						default: return false; break;
+					}
+					// table 생성
+					trafficTable += '<tr><td>' + number                           + '</td>';
+					trafficTable += '<td>'     + advertiser                       + '</td>';
+					trafficTable += '<td>'     + item['campaign_seq']             + '</td>';
+					trafficTable += '<td>'     + item['COUNT(campaign_seq)']      + '</td>';
+					trafficTable += '<td>'     + item['COUNT(adv_result_params)'] + '</td>';
+					// 전환 상세 표시를 위한 변수 표시
+					trafficTable += '<td>'     + _test                            + '</td>';
+					  trafficTable += '<td>'     + test2                            + '</td>';
+					trafficTable += '<td>'     + test3                            + '</td></tr>';
+				  // chart에 사용할 traffic의 total을 담은 array
+					trafficTotal.push(item['COUNT(adv_result_params)']);
+					// for문이 반복될때마다 +1씩 증가하여 board rownum을 표시
+					number++;
+				});
+				// 첫번째(.tbody-01) 테이블에 table 값을 대입
+				$('.tbody-01').html(trafficTable);
+			}
+			  // blog table을 만들기 위한 함수
+			function blogList(data, advertiser) {
+				  // board no를 표시하기 위한 변수
+				var number = 1;
+			  /*
+				  // 배열속 객체의 특정값을 담기 위한 array
+				  var maxCountArray = [];
+				  // for of문으로 객체속 값을 maxCountArray라는 array에 담는다.
+			  for (var value of data) {
+				  maxCountArray.push(value['COUNT(campaign_seq)']);
+			  }
+				  // array속에 최대값을 구하여 maxNum 변수를 초기화
+			  var maxNum = Math.max(...maxCountArray);
+		  */
+				data.forEach(function(item, index) {
+					// 가공된 index를 대입하기 위한 변수
+					var num = '';
+					// item['media_key]의 값을 substring하기 위한 변수
+					var mediaKey = item['media_key'];
+					  var _index = mediaKey.substring(15, 18)
+					// 최종적으로 switch문에 사용 될 string을 만든다.
+					  var blogger = '{"mplkey":"' + 'blog' + _index +'"}';
+					  // table에 표시될 string을 가공
+					  var bloggerName = blogger.replace(blogger, 'ID : ' + _index);
+					  // for문을 돌리며 일치하는 값이 나오면 위에서 만든 값을 대입
+					switch (item['media_key']) {
+					  case blogger : item['media_key'] = bloggerName; break;
+					  // 중간에 순차대로 데이터가 들어가지 않을시(ex 001, 002, 003..이 아닌 001, 003, 010..등) 
+					  default : item['media_key'] = '형식에 맞지 않는 데이터가 입력되어 있습니다.'
+					}
+					// table 생성
+					blogTable += '<tr><td>' + number                           + '</td>';
+					blogTable += '<td>'     + advertiser                       + '</td>';
+					blogTable += '<td>'     + item['media_key']                + '</td>';
+					blogTable += '<td>'     + item['COUNT(campaign_seq)']      + '</td>';
+					blogTable += '<td>'     + item['COUNT(adv_result_params)'] + '</td></tr>';
+					// for문이 반복될때마다 +1씩 증가하여 board rownum을 표시
+					number++;
+				});
+				// 두번째(.tbody-02) 테이블에 table 값을 대입
+				$('.tbody-02').html(blogTable);
+			}
+			// vr table을 만들기 위한 함수
+			function vrList(data, advertiser) {
+				  // board no를 표시하기 위한 변수
+				var number = 1;
+				  /*
+					// 배열속 객체의 특정값을 담기 위한 array
 					var maxCountArray = [];
-  		    for (var value of data) {
-  		    	maxCountArray.push(value['COUNT(campaign_seq)'])
-  		    }
-  		    
-  		    var maxNum = Math.max(...maxCountArray);
-  		    //======================================================================여기까지 최대값 구하기
-				
-  			data.forEach(function(item, index) {
-  				// table 생성
-  				blogTable += '<tr><td>' + number + '</td>';
-  				blogTable += '<td>' + advertiser + '</td>';
-  				blogTable += '<td>' + item['media_key'] + '</td>';
-  				blogTable += '<td>' + item['COUNT(campaign_seq)'] + '</td>';
-  				blogTable += '<td>' + item['COUNT(adv_result_params)'] + '</td></tr>';
-  				// for문이 반복될때마다 +1씩 증가
-  				number++;
-  			});
-  			// 첫번째(.tbody-02) 테이블에 table 값을 대입
-  			$('.tbody-02').html(blogTable);
-  		}
-  		// date 형식을 만들기 위한 함수
-  		function dateFormat(today) {
-  			var year = today.getFullYear();
-  			var month = ('0' + (today.getMonth() + 1)).slice(-2);
-  			var day = ('0' + today.getDate()).slice(-2);
-  			var dateString = year + '-' + month + '-' + day;
-  			return dateString;
-  		}
-  		// 새로고침 함수
-  		function refresh() {
-  			window.location.href = '/kb/auto/list_table.sdo';
-  		}
-		//*chart 관련 선언부*=====================================================
-			const ctx = document.getElementById('myChart').getContext('2d');
-  		const myChart = new Chart(ctx, {
-  			type: 'bar',
-  			data: {
-  				labels: chart,
-  				datasets: [{
-  					label: chartName,
-  					data: trafficTotal,
-  					backgroundColor: [
-  						'rgba(179, 183, 187, 0.2)',
-  						'rgba(179, 183, 187, 0.2)',
-  						'rgba(179, 183, 187, 0.2)',
-  						'rgba(179, 183, 187, 0.2)',
-  						'rgba(179, 183, 187, 0.2)'
-  					],
-  					borderColor: [
-  						'rgba(179, 183, 187, 1)',
-  						'rgba(179, 183, 187, 1)',
-  						'rgba(179, 183, 187, 1)',
-  						'rgba(179, 183, 187, 1)',
-  						'rgba(179, 183, 187, 1)'
-  					],
-  					borderWidth: 1
-  				}]
-  			},
-  			options: {
-  				responsive: false,
-  				scales: {
-  					y: {
-  						beginAtZero: true
-  					}
-  				}
-  			}
-  		});
-  	//====================================================================
-		/*]]>*/
-	</script>
-</body>
-</html>
+					// for of문으로 객체속 값을 maxCountArray라는 array에 담는다.
+				for (var value of data) {
+					maxCountArray.push(value['COUNT(campaign_seq)']);
+				}
+					// array속에 최대값을 구하여 maxNum 변수를 초기화
+				var maxNum = Math.max(...maxCountArray);
+			  */
+				data.forEach(function(item, index) {
+				// 가공된 index를 대입하기 위한 변수
+					var num = '';
+					// item['media_key]의 값을 substring하기 위한 변수
+					var mediaKey = item['media_key'];
+					  var _index = mediaKey.substring(13, 16);
+					// 최종적으로 switch문에 사용 될 string을 만든다.
+					  var vr = '{"mplkey":"' + 'vr' + _index +'"}';
+					  // table에 표시될 string을 가공
+					  var vrName = vr.replace(vr, 'ID : ' + _index);
+					  // for문을 돌리며 일치하는 값이 나오면 위에서 만든 값을 대입
+					switch (item['media_key']) {
+					  case vr : item['media_key'] = vrName; break;
+					  // 중간에 순차대로 데이터가 들어가지 않을시(ex 001, 002, 003..이 아닌 001, 003, 010..등) 
+					  default : item['media_key'] = '형식에 맞지 않는 데이터가 입력되어 있습니다.'
+					}
+					// table 생성
+					vrTable += '<tr><td>' + number                           + '</td>';
+					vrTable += '<td>'     + advertiser                       + '</td>';
+					vrTable += '<td>'     + item['media_key']                + '</td>';
+					vrTable += '<td>'     + item['COUNT(campaign_seq)']      + '</td>';
+					vrTable += '<td>'     + item['COUNT(adv_result_params)'] + '</td></tr>';
+					// for문이 반복될때마다 +1씩 증가하여 board rownum을 표시
+					number++;
+				});
+				// 세번째(.tbody-03) 테이블에 table 값을 대입
+				$('.tbody-03').html(vrTable);
+			}
+			// date 형식을 만들기 위한 함수
+			function dateFormat(today) {
+				var year  = today.getFullYear();
+				var month = ('0' + (today.getMonth() + 1)).slice(-2);
+				var day   = ('0' + today.getDate()).slice(-2);
+				var dateString = year + '-' + month + '-' + day;
+				return dateString;
+			}
+			// page redirect 함수(refresh)
+			function refresh() {
+				window.location.href = '/kb/auto/list_table.sdo';
+			}
+			
+		  //*chart 관련 선언부*=====================================================
+			  const ctx = document.getElementById('myChart').getContext('2d');
+			const myChart = new Chart(ctx, {
+				type: 'bar',
+				data: {
+					// switchingKey의 값에 따라 chart 변수에 대입 되는 값을 변환
+					labels: chart,
+					datasets: [{
+						// switchingKey의 값에 따라 chartName 변수에 대입 되는 값을 변환
+						label: chartName,
+						// chart에 반영될 값
+						data: trafficTotal,
+						backgroundColor: [
+							'rgba(179, 183, 187, 0.2)',
+							'rgba(179, 183, 187, 0.2)',
+							'rgba(179, 183, 187, 0.2)',
+							'rgba(179, 183, 187, 0.2)',
+							'rgba(179, 183, 187, 0.2)'
+						],
+						borderColor: [
+							'rgba(88, 88, 88, 1)',
+							'rgba(88, 88, 88, 1)',
+							'rgba(88, 88, 88, 1)',
+							'rgba(88, 88, 88, 1)',
+							'rgba(88, 88, 88, 1)'
+						],
+						borderWidth: 1
+					}]
+				},
+				options: {
+					responsive: false,
+					scales: {
+						y: {
+							beginAtZero: true
+						}
+					}
+				}
+			});
+		//====================================================================
+		  /*]]>*/
+	  </script>
+  </body>
+  </html>
