@@ -2,27 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script type="text/javascript" src="/js/kb/auto/chart.js"></script>
-<script src="../../../static/vendor/jquery/jquery.min.js" th:src="@{/vendor/jquery/jquery.min.js}"></script>
-<script src="../../../static/vendor/jquery-ui/jquery-ui.min.js" th:src="@{/vendor/jquery-ui/jquery-ui.min.js}"></script>
-<script src="../../../static/vendor/bootstrap/js/bootstrap.bundle.min.js" th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
-<script src="../../../static/vendor/jquery.easing/jquery.easing.min.js" th:src="@{/vendor/jquery.easing/jquery.easing.min.js}"></script>
-<script src="../../../static/vendor/datatables.net/jquery.dataTables.min.js" th:src="@{/vendor/datatables.net/jquery.dataTables.min.js}"></script>
-<script src="../../../static/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js" th:src="@{/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js}"></script>
-<script src="../../../static/vendor/moment/moment-with-locales.min.js" th:src="@{/vendor/moment/moment-with-locales.min.js}"></script>
-<script src="../../../static/cender/sb-admin-2/js/sb-admin-2.min.js" th:src="@{/cender/sb-admin-2/js/sb-admin-2.min.js}"></script>
-<script src="../../../static/js/jquery-calendar-conf.js" th:src="@{/js/jquery-calendar-conf.js}"></script>
-<link rel="stylesheet" type="text/css" href="../../../static/vendor/jquery-ui/themes/base/jquery-ui.min.css" th:href="@{/vendor/jquery-ui/themes/base/jquery-ui.min.css}" />
-<link rel="stylesheet" type="text/css" href="../../../static/vendor/bootstrap/css/bootstrap.min.css" th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" />
-<link rel="stylesheet" href="/css/chart.css" />
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 <title>chart</title>
 </head>
 <body>
@@ -34,28 +18,33 @@
           <li class="breadcrumb-item active" aria-current="page">CAMPAIGN</li>
         </ol>
         <div class="row">
-          <div class="col-8">
-            <form id="date-calc-form" action="/kb/auto/list_table.sdo" method="get">
+          <div class="col-10">
+            <form id="date-calc-form" action="" method="get">
               <div class="date-calc">
                 <div class="adv-name">
                 
                 </div>
                 <div>
-                  <input type="date" id="dateStart" name="dateStart" value="" /> 
-                  <input class="ml-1" type="date" id="dateEnd" name="dateEnd" value="" /> 
-                  <select class="ml-1" name="advertiser">
+                  <input class="btn btn-outline-secondary" type="button" value="today" onclick="dayCalc('today');"/>
+                  <input class="btn btn-outline-secondary ml-1" type="button" value="week" onclick="dayCalc('week');"/>
+                  <input class="btn btn-outline-secondary ml-1" type="button" value="month" onclick="dayCalc('month');"/>
+                  <input id="day" class="form-control ml-1" type="hidden" name="date" value="" /> 
+                  <input class="form-control ml-1" type="date" id="dateStart" name="dateStart" value="" /> 
+                  <input class="form-control ml-1" type="date" id="dateEnd" name="dateEnd" value="" /> 
+                  <select id="advertiser" class="form-control ml-1" name="advertiser" style="width: 105px;">
                     <option value="">SELECT</option>
                     <option value="0">현대해상</option>
                     <option value="1">캐롯</option>
-                  </select> 
-                  <input class="download btn btn-secondary" id="excelDownload" type="button" value="엑셀다운">
-                  <input class="dateKey ml-1" type="hidden" name="setDateKey" value="0" />
-                  <input class="btn btn-secondary ml-1" type="submit" value="조건검색" />
-                  <input class="btn btn-secondary refresh ml-1" type="button" onclick="refresh();" value="새로고침" />
+                  </select>
+                  <input class="campaign" type="hidden" name="campaign" value="" />
+                  <input class="dateKey" type="hidden" name="setDateKey" value="" />
+                  <input id="submit" class="btn btn-outline-secondary" type="submit" value="조건검색" />
+                  <input class="btn btn-outline-secondary refresh ml-1" type="button" onclick="refresh();" value="새로고침" />
+                  <input class="download btn btn-outline-success ml-1" onclick="fnTbInfo_Excel();" type="button" value="엑셀다운">
                 </div>
               </div>
             </form>
-            <table class="table table-hover table-bordered text-center" id="tableData">
+            <table class="table table-hover table-bordered text-center" id="tb-1">
               <thead>
                 <tr class="table-secondary">
                   <th>NO</th>
@@ -63,18 +52,31 @@
                   <th>매체사</th>
                   <th>유입 TOTAL</th>
                   <th>전환 TOTAL</th>
-                  <th>전환 상세</th>
+                  <th>유효 전환 [ 1 + 2 ]</th>
+                  <th colspan="3">전환 상세 [ 1 / 2 / 3 ]</th>
                 </tr>
               </thead>
               <tbody class="tbody-01">
-
+                  
               </tbody>
             </table>
           </div>
-          <div class="col-4">
+          <div class="col-2">
             <div class="chart-name">[ TRAFFIC CHART ]</div>
-            <div>
-              <canvas id="myChart" style="text-align: center; height: 294px; width: 100%"></canvas>
+          	<div style="text-align: center; height: 294px; width: 100%;">
+              <canvas id="pie-chart"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6 chart">
+            <div class="traffic-chart" style="height: 360px; width: 100%;">
+              <canvas id="myChart" style="text-align: center; width: 100%;"></canvas>
+            </div>
+          </div>
+          <div class="col-6 chart">
+            <div style="height: 360px; width: 100%;">
+              <canvas id="traffic-total-chart" style="width:100%;"></canvas>
             </div>
           </div>
         </div>
@@ -89,7 +91,7 @@
         <div class="row">
           <div class="col-6">
             <div class="blog-name">[ BLOG ]</div>
-            <table class="table table-hover table-bordered text-center">
+            <table class="table table-hover table-bordered text-center" id="tb-2">
               <thead>
                 <tr class="table-secondary">
                   <th>NO</th>
@@ -106,7 +108,7 @@
           </div>
           <div class="col-6">
             <div class="vr-name">[ VIRAL ]</div>
-            <table class="table table-hover table-bordered text-center">
+            <table class="table table-hover table-bordered text-center" id="tb-3">
               <thead>
                 <tr class="table-secondary">
                   <th>NO</th>
@@ -126,8 +128,8 @@
     </div>
   </div>
   <script th:inline="javascript">
-		/*<![CDATA[*/
-		//*전역변수 선언부*======================================================
+	/*<![CDATA[*/
+			//*전역변수 선언부*======================================================
   		// 모든 매체사의 데이터가 담긴 변수
   		var tableData = /*[[${tableData}]]*/'default';
   		// blog(17) 데이터가 담긴 변수
@@ -138,10 +140,14 @@
   		var switchingKey = /*[[${switchingKey}]]*/'default';
   		// 기간 설정을 하기 위한 변수
   		var setDate = /*[[${setDate}]]*/'default';
-  		// date가 변경되었는지 확인 하기 위한 변수
+  		// chartData
   		var setDateKey = /*[[${setDateKey}]]*/'default';
   		// adv total값을 담기위한 변수
+  		var chartTotal = /*[[${chartTotal}]]*/'default';
+  		// date가 변경되었는지 확인 하기 위한 변수
   		var advTotal = /*[[${advTotal}]]*/'default';
+  		// table을 click시 chart에 표시되는 이름을 표시하기 위한 변수
+  		var campaignName = /*[[${campaignName}]]*/'default';
   		// campaign table을 만들어 담기 위한 변수
   		var trafficTable = '';
   		// blog table을 만들어 담기 위한 변수
@@ -160,53 +166,57 @@
   		var chartName = '';
   		// traffic total을 순서대로 담기 위한 변수
   		var trafficTotal = [];
+  		// 유효값 total을 순서대로 담기 위한 변수
+  		var realTotal = [];
+	    // 가공된 chartTotal을 담을 array
+			var chartArray  = [];
+	    // 월을 담을 array
+  		var dateValue   = [];
+	    // 유효전환_1값을 담을 array
+  		var dateValue_1 = [];
+	    // 유효전환_2값을 담을 array
+  		var dateValue_2 = [];
+	    // 유효전환 1, 2값을 더해서 담을 array
+  		var valueTotal  = [];
   		
-  	//*조건 선언부*=========================================================
-  		// blog Table
+  		//*조건 선언부*=========================================================
+  		// blog Table => function parameter(data, 'name')
 			blogList(blogData, '캐롯');
-  	
 			// vr Table
 			vrList(vrData, '캐롯');
 			
-  		// 현대해상 or 캐롯 data switching / function parameter(data, campaign, advertiser)
+			$('.campaign').val(campaignName);
+			
+  		// hi or carrot table data switching / function parameter(data, campaign(array type), 'advertiser')
   		if (switchingKey === 0) {
   			tableList(tableData, hiData, '현대해상');
   			$('.adv-name').text('[ 현대해상 ]');
-  			// chart가 만들어질때 필요한 변수
-  	 		var chart = ['TDM', 'M-APP', 'NBT', 'TNK', 'IVE'];
-	  		var chartName = '현대해상 유입률';
+	  		var chartName = '현대해상 전환율';
   		} else {
   			tableList(tableData, carrotData, '캐롯');
   			$('.adv-name').text('[ 캐롯 ]');
-  			var chart = ['NBT', 'TDM', 'TNK', 'IVE', 'M-APP', 'VIRAL'];
-	  		var chartName = '캐롯 유입률';
-	  		// canvas태그의 height를 변경한다.
-	  		$('#myChart').height(343);
-  		}
-  		// setDateKey가 0(default)이면 calendar의 시작과 끝을 today로 지정
-  		if (setDateKey === 0) {
-    		$('#dateStart').val(day);
-  			$('#dateEnd').val(day);
-  			// back-end에서 사용되는 key => setDateKey이름으로 front-end단으로 보내짐
-  			$('.dateKey').val(1);
-  		// setDateKey가 1이면 calendar의 시작과 끝을 back-end 서버에서 넘겨온 값으로 대입
-  		} else {
-    		$('#dateStart').val(setDate['dateStart'].substring(0, 10));
-  			$('#dateEnd').val(setDate['dateEnd'].substring(0, 10));
-  			// back-end value(0) => front-end value(1) => back-end value(1) => front-end value(1)...
-  			$('.dateKey').val(1);
+	  		var chartName = '캐롯 전환율';
+	  		$('#card-01 > .card-body > .row:nth-child(2)').css('margin-bottom', 15);
   		}
   		
-		//*함수 선언부*=========================================================
+			// date value를 input value에 대입
+  		$('#dateStart').val(setDate['dateStart'].substring(0, 10));
+			$('#dateEnd').val(setDate['dateEnd'].substring(0, 10));
+  		$('#advertiser').val(switchingKey);
+  		
+  		if (setDateKey === 0) {
+  			$('.dateKey').val(1);
+  		} else {
+  			$('.dateKey').val(setDateKey);
+  		}
+  		
+			//*함수 선언부*=========================================================
   		// campaign Table을 만들기 위한 함수
-  		function tableList(data, array, advertiser) {
-			
+			function tableList(data, array, advertiser) {
 				// board no를 표시하기 위한 변수
 	  		var number = 1;
-				
 				// ArrayList<Object> = List<HashMap<String, String>> 형식으로 받은 데이터를 가공하여 담기 위한 변수
 				var advArray = [];
-				
 				// back-end에서 넘어온 데이터가 array > array > object 형식으로 담겨 있기 때문에 for문을 중첩하여 사용하여 데이터를 읽어온다.
 		    for (var i = 0; i < advTotal.length; i++) {
 		    	for(var j = 0; j < advTotal[i].length; j++) {
@@ -214,27 +224,97 @@
 		    		advArray.push(advTotal[i][j]);
   	    	}
 		    }
+				
   			data.forEach(function(item, index) {
   				// 테이블의 표시를 위해 객체 속 'campaign_seq'라는 key를 찾아 매체사 이름 대입
   				var idx = item['campaign_seq'];
-  				
   				// advArray속에 데이터를 담기 위한 array
 					var advCount = [];
-					
 					// advArray의 길이만큼 반복하며 조건에 맞는 데이터를 array속에 담는다.
 					for(var i = 0; i < advArray.length; i++) {
 						if (advArray[i]['campaign_seq'] === item['campaign_seq']) {
 							advCount.push(advArray[i]['adv_result_params'] + ':' + advArray[i]['COUNT(adv_result_params)']);
 						}
   	    	}
-					// 전환 상세 표시를 위한 변수
+					// 전환 상세를 html에 표시하기 위한 변수
   				var num_1 = '';
   				var num_2 = '';
   				var	num_3 = '';
-  				num_1=(advCount[0] === undefined)?'':advCount[0];
-  				num_2=(advCount[1] === undefined)?'':advCount[1];
-  				num_3=(advCount[2] === undefined)?'':advCount[2];
-
+  				// length에 따른 조건을 주기 위한 변수와 조건
+  				var length = 0;
+  				// advCount length가 3일때
+  				if (advCount.length === 3) {
+  					// true 조건을 얻기 위해 1을 대입
+  					length = 1;
+  					// hi
+  					var adv = advCount[0].substring(1, 10);
+  					// carrot
+  					var _adv = advCount[0].substring(1, 9);
+  					
+  					if (adv === '"inagcat"') {
+    					num_1=(advCount[0] === undefined)?'':convertCommas(advCount[0]).replace('{"inagcat":"1"}:', '[１] : ');
+      				num_2=(advCount[1] === undefined)?'':convertCommas(advCount[1]).replace('{"inagcat":"2"}:', '[２] : ');
+      				num_3=(advCount[2] === undefined)?'':convertCommas(advCount[2]).replace('{"inagcat":"3"}:', '[３] : ');
+  					} else if (_adv === '"Carrot"') {
+  						num_1=(advCount[0] === undefined)?'':convertCommas(advCount[0]).replace('{"Carrot":"1"}:', '[１] : ');
+      				num_2=(advCount[1] === undefined)?'':convertCommas(advCount[1]).replace('{"Carrot":"2"}:', '[２] : ');
+      				num_3=(advCount[2] === undefined)?'':convertCommas(advCount[2]).replace('{"Carrot":"3"}:', '[３] : ');
+  					}
+					// array length가 2일때
+  				} else if (advCount.length === 2) {
+						length = 1;
+						// Carrot or inagcat type을 구분하기 위한 변수
+						var type = advCount[0].substring(0, 14);
+						var type2 = advCount[1].substring(0, 14);
+						var _type = advCount[0].substring(0, 15);
+						var _type2 = advCount[1].substring(0, 15);
+						// 상세번호에 따른 조건
+  					if (type === '{"Carrot":"1"}' && type2 === '{"Carrot":"3"}') {
+  						num_1=(advCount[0] === undefined)?'':convertCommas(advCount[0]).replace('{"Carrot":"1"}:', '[１] : ');
+  						num_2='';
+  						num_3=(advCount[1] === undefined)?'':convertCommas(advCount[1]).replace('{"Carrot":"3"}:', '[３] : ');
+  					} else if (type === '{"Carrot":"2"}' && type2 === '{"Carrot":"3"}') {
+  						num_1='';
+  						num_2=(advCount[0] === undefined)?'':convertCommas(advCount[0]).replace('{"Carrot":"2"}:', '[２] : ');
+  						num_3=(advCount[1] === undefined)?'':convertCommas(advCount[1]).replace('{"Carrot":"3"}:', '[３] : ');
+  					} else if (type === '{"Carrot":"1"}' && type2 === '{"Carrot":"2"}') {
+  						num_1=(advCount[0] === undefined)?'':convertCommas(advCount[0]).replace('{"Carrot":"1"}:', '[１] : ');
+  						num_2=(advCount[1] === undefined)?'':convertCommas(advCount[1]).replace('{"Carrot":"2"}:', '[２] : ');;
+  						num_3='';
+  					} else if (_type === '{"inagcat":"1"}' && _type2 === '{"inagcat":"3"}') {
+  						num_1=(advCount[0] === undefined)?'':convertCommas(advCount[0]).replace('{"inagcat":"1"}:', '[１] : ');
+  						num_2='';
+  						num_3=(advCount[1] === undefined)?'':convertCommas(advCount[1]).replace('{"inagcat":"3"}:', '[３] : ');
+  					} else if (_type === '{"inagcat":"2"}' && _type2 === '{"inagcat":"3"}') {
+  						num_1='';
+  						num_2=(advCount[0] === undefined)?'':convertCommas(advCount[0]).replace('{"inagcat":"2"}:', '[２] : ');
+  						num_3=(advCount[1] === undefined)?'':convertCommas(advCount[1]).replace('{"inagcat":"3"}:', '[３] : ');
+  					} else {
+  						num_1=(advCount[0] === undefined)?'':convertCommas(advCount[0]).replace('{"inagcat":"1"}:', '[１] : ');;
+  						num_2=(advCount[1] === undefined)?'':convertCommas(advCount[1]).replace('{"inagcat":"2"}:', '[２] : ');
+  						num_3='';
+  					}
+  				// advCount length가 1일때	
+  				} else if (advCount.length === 1){
+  					// hi
+  					var adv = advCount[0].substring(1, 14);
+  					// carrot
+  					var _adv = advCount[0].substring(1, 13);
+  					
+  					if (adv === '"inagcat":"1"') {
+    					num_1=(advCount[0] === undefined)?'':convertCommas(advCount[0]).replace('{"inagcat":"1"}:', '[１] : ');
+  					} else if (adv === '"inagcat":"2"') {
+  						num_1=(advCount[0] === undefined)?'':convertCommas(advCount[0]).replace('{"inagcat":"2"}:', '[２] : ');
+  					} else if (adv === '"inagcat":"3"') {
+  						num_1=(advCount[0] === undefined)?'':convertCommas(advCount[0]).replace('{"inagcat":"3"}:', '[３] : ');
+  					} else if (_adv === '"Carrot":"1"') {
+  						num_1=(advCount[0] === undefined)?'':convertCommas(advCount[0]).replace('{"Carrot":"1"}:', '[１] : ');
+  					} else if (_adv === '"Carrot":"2"') {
+  						num_1=(advCount[0] === undefined)?'':convertCommas(advCount[0]).replace('{"Carrot":"2"}:', '[２] : ');
+  					} else if (_adv === '"Carrot":"3"') {
+  						num_1=(advCount[0] === undefined)?'':convertCommas(advCount[0]).replace('{"Carrot":"3"}:', '[３] : ');
+  					}
+  				}
   				switch (idx) {
   					// 배열을 순서대로 돌리기 때문에 idx에 의해 변경되는 이름을 삼항연산자로 조건수행
   					case array[0] : (idx===6)  ? item['campaign_seq']='TDM'   : item['campaign_seq']='NBT';   break;
@@ -245,29 +325,40 @@
   					case array[5] :                                             item['campaign_seq']='VIRAL'; break;
   					default: return false; break;
   				}
-  				
   				// table 생성
-  				trafficTable += '<tr><td>' + number                           + '</td>';
-  				trafficTable += '<td>'     + advertiser                       + '</td>';
-  				trafficTable += '<td>'     + item['campaign_seq']             + '</td>';
-  				trafficTable += '<td>'     + item['COUNT(campaign_seq)']      + '</td>';
-  				trafficTable += '<td>'     + item['COUNT(adv_result_params)'] + '</td>';
-  				// 전환 상세 표시를 위한 변수 표시
-  				trafficTable += '<td>'     + num_1 + num_2 + num_3            + '</td></tr>';
-  				
+  				trafficTable += '<tr><td>'              + number                                                  + '</td>';
+  				trafficTable += '<td>'                  + advertiser                                              + '</td>';
+  				trafficTable += '<td class="campaign">' + item['campaign_seq']; chart.push(item['campaign_seq']); + '</td>';
+  				trafficTable += '<td>'                  + convertCommas(item['COUNT(campaign_seq)']);             + '</td>';
+  				trafficTable += '<td>'                  + convertCommas(item['COUNT(adv_result_params)']);        + '</td>';
+  				// 전환 상세값에 1번 2번을 합산하여 보여주기 위해 필요한값을 자르고 ','를 없앤후 String => int type casting
+  				var _numPlus_1 = parseInt(num_1.substring(5, num_1.length).replace(',', ''));
+  				var _numPlus_2 = parseInt(num_2.substring(5, num_2.length).replace(',', ''));
+  				// casting을 하면서 문자열이 없을경우 NaN(Not a number)가 발생하므로 num의 value가 ''일시 0을 대입하여 계산시 오류가 없게 한다.
+  				if (num_1 == '') _numPlus_1 = 0;
+  				if (num_2 == '') _numPlus_2 = 0;
+  				trafficTable += '<td class="color">' + convertCommas(_numPlus_1+_numPlus_2) + '</td>';
+  				// 전환 상세 표시
+  				if (length) {
+    				trafficTable += '<td>' + num_1             + '</td>';
+    				trafficTable += '<td>' + num_2             + '</td>';
+    				trafficTable += '<td>' + num_3             + '</td></tr>';
+  				} else {
+  					trafficTable += '<td colspan="3">' + num_1 + '</td></tr>';
+  				}
     			// chart에 사용할 traffic의 total을 담은 array
   				trafficTotal.push(item['COUNT(adv_result_params)']);
+  				// chart에 사용할 traffic의 유효전환 total을 담은 array
+    			realTotal.push(_numPlus_1+_numPlus_2);
   				// for문이 반복될때마다 +1씩 증가하여 board rownum을 표시
   				number++;
   			});
-  			
   			// 첫번째(.tbody-01) 테이블에 table 값을 대입
   			$('.tbody-01').html(trafficTable);
   		}
 		
 			// blog table을 만들기 위한 함수
   		function blogList(data, advertiser) {
-				
 				// board no를 표시하기 위한 변수
 	  		var number = 1;
 			/*
@@ -281,35 +372,27 @@
 		    var maxNum = Math.max(...maxCountArray);
 	    */
   			data.forEach(function(item, index) {
-  				
   				// 가공된 index를 대입하기 위한 변수
   				var num = '';
-  				
   				// item['media_key]의 값을 substring하기 위한 변수
   				var mediaKey = item['media_key'];
 					var _index = mediaKey.substring(15, 18)
-					
   				// 최종적으로 switch문에 사용 될 string을 만든다.
 					var blogger = '{"mplkey":"' + 'blog' + _index +'"}';
-					
 					// table에 표시될 string을 가공
 					var bloggerName = blogger.replace(blogger, 'ID : ' + _index);
-					
 					// for문을 돌리며 일치하는 값이 나오면 위에서 만든 값을 대입
   				switch (item['media_key']) {
-					case blogger : item['media_key'] = bloggerName; break;
-					
-					// 중간에 순차대로 데이터가 들어가지 않을시(ex 001, 002, 003..이 아닌 001, 003, 010..등) 
-					default : item['media_key'] = '형식에 맞지 않는 데이터가 입력되어 있습니다.'
+  					case blogger : item['media_key'] = bloggerName; break;
+  					// 중간에 순차대로 데이터가 들어가지 않을시(ex 001, 002, 003..이 아닌 001, 003, 010..등) 
+  					default : item['media_key'] = '형식에 맞지 않는 데이터가 입력되어 있습니다.'
   				}
-					
   				// table 생성
-  				blogTable += '<tr><td>' + number                           + '</td>';
-  				blogTable += '<td>'     + advertiser                       + '</td>';
-  				blogTable += '<td>'     + item['media_key']                + '</td>';
-  				blogTable += '<td>'     + item['COUNT(campaign_seq)']      + '</td>';
-  				blogTable += '<td>'     + item['COUNT(adv_result_params)'] + '</td></tr>';
-  				
+  				blogTable += '<tr><td>' + number                                          + '</td>';
+  				blogTable += '<td>'     + advertiser                                      + '</td>';
+  				blogTable += '<td>'     + item['media_key']                               + '</td>';
+  				blogTable += '<td>'     + convertCommas(item['COUNT(campaign_seq)'])      + '</td>';
+  				blogTable += '<td>'     + convertCommas(item['COUNT(adv_result_params)']) + '</td></tr>';
   				// for문이 반복될때마다 +1씩 증가하여 board rownum을 표시
   				number++;
   			});
@@ -320,39 +403,31 @@
 			
   		// vr table을 만들기 위한 함수
   		function vrList(data, advertiser) {
-  			
 				// board no를 표시하기 위한 변수
 	  		var number = 1;
 				
   			data.forEach(function(item, index) {
-  				
 					// 가공된 index를 대입하기 위한 변수
   				var num = '';
-					
   				// item['media_key]의 값을 substring하기 위한 변수
   				var mediaKey = item['media_key'];
 					var _index = mediaKey.substring(13, 16);
-					
   				// 최종적으로 switch문에 사용 될 string을 만든다.
 					var vr = '{"mplkey":"' + 'vr' + _index +'"}';
-					
 					// table에 표시될 string을 가공
 					var vrName = vr.replace(vr, 'ID : ' + _index);
-					
 					// for문을 돌리며 일치하는 값이 나오면 위에서 만든 값을 대입
   				switch (item['media_key']) {
-					case vr : item['media_key'] = vrName; break;
-					
-					// 중간에 순차대로 데이터가 들어가지 않을시(ex 001, 002, 003..이 아닌 001, 003, 010..등) 
-					default : item['media_key'] = '형식에 맞지 않는 데이터가 입력되어 있습니다.'
+						case vr : item['media_key'] = vrName; break;
+  					// 중간에 순차대로 데이터가 들어가지 않을시(ex 001, 002, 003..이 아닌 001, 003, 010..등) 
+  					default : item['media_key'] = '형식에 맞지 않는 데이터가 입력되어 있습니다.'
   				}
-					
   				// table 생성
-  				vrTable += '<tr><td>' + number                           + '</td>';
-  				vrTable += '<td>'     + advertiser                       + '</td>';
-  				vrTable += '<td>'     + item['media_key']                + '</td>';
-  				vrTable += '<td>'     + item['COUNT(campaign_seq)']      + '</td>';
-  				vrTable += '<td>'     + item['COUNT(adv_result_params)'] + '</td></tr>';
+  				vrTable += '<tr><td>' + number                                          + '</td>';
+  				vrTable += '<td>'     + advertiser                                      + '</td>';
+  				vrTable += '<td>'     + item['media_key']                               + '</td>';
+  				vrTable += '<td>'     + convertCommas(item['COUNT(campaign_seq)'])      + '</td>';
+  				vrTable += '<td>'     + convertCommas(item['COUNT(adv_result_params)']) + '</td></tr>';
   				
   				// for문이 반복될때마다 +1씩 증가하여 board rownum을 표시
   				number++;
@@ -375,91 +450,170 @@
   		function refresh() {
   			window.location.href = '/kb/auto/list_table.sdo';
   		}
+  		// 숫자 단위 표현
+  		function convertCommas(number) {
+	      if (number === null || number === '' || number === undefined) return;
+	      if (typeof number === String) {
+			return number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	      } else {
+			return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	      }
+	    };
+	    // 엑셀 다운로드 모듈
+  		function fnTbInfo_Excel() { 
+    	//XLSX.utils.book_new() 를 이용해서 새 통합 문서 객체 생성 
+        workBook = XLSX.utils.book_new(); 
+        
+        //테이블을 시트로 변환 (table_to_sheet 이용)
+        //워크북을 시트로 변환 (book_append_sheet 이용) 
+        XLSX.utils.book_append_sheet(workBook, XLSX.utils.table_to_sheet(document.getElementById('tb-1')), 'campaign'); 
+        XLSX.utils.book_append_sheet(workBook, XLSX.utils.table_to_sheet(document.getElementById('tb-2')), 'blog'); 
+        XLSX.utils.book_append_sheet(workBook, XLSX.utils.table_to_sheet(document.getElementById('tb-3')), 'viral'); 
+        
+        XLSX.writeFile(workBook, day + ' traffic.xlsx', { bookType: 'xlsx', type: 'binary' }); 
+      }
+	    
+	    // date btn
+	    function dayCalc (day) {
+	    	$('#day').val(day);
+	    	$('#submit').click();
+	    }
+	    
+	    // table의 campaign class를 click시 value를 가져오기 위한 함수
+	    $('.campaign').click(function() {
+	    	var campaign = $(this).text();
+	    	switch (campaign) {
+  	    	case 'TDM'  : $('.campaign').val('TDM');   break;
+  	    	case 'M-APP': $('.campaign').val('M-APP'); break;
+  	    	case 'NBT'  : $('.campaign').val('NBT');   break;
+  	    	case 'TNK'  : $('.campaign').val('TNK');   break;
+  	    	case 'IVE'  : $('.campaign').val('IVE');   break;
+  	    	case 'VIRAL': $('.campaign').val('VIRAL'); break;
+	    		default: alert('error'); break;
+	    	}
+	    	$('#submit').click();
+	    });
   		
-		//*chart 관련 선언부*=====================================================
-			const ctx = document.getElementById('myChart').getContext('2d');
-  		const myChart = new Chart(ctx, {
-  			type: 'bar',
-  			data: {
+  		// chartTotal data 가공
+      for (var i = 0; i < chartTotal.length; i++) {
+      	for(var j = 0; j < chartTotal[i].length; j++) {
+      		// 원하는 데이터값을 배열속에 넣는다.
+      		chartArray.push(chartTotal[i][j]);
+    		}
+      }
+      // 월의 갯수(이름)와 유효전환값을 담을 forEach문
+  		chartArray.forEach(function(data, index) {
+  			var date = data['create_datetime'].substring(5, 7);
+  			switch (date) {
+    			case '01': dateValue.push('01'); break;
+    			case '02': dateValue.push('02'); break;
+    			case '03': dateValue.push('03'); break;
+    			case '04': dateValue.push('04'); break;
+    			case '05': dateValue.push('05'); break;
+    			case '06': dateValue.push('06'); break;
+    			case '07': dateValue.push('07'); break;
+    			case '08': dateValue.push('08'); break;
+    			case '09': dateValue.push('09'); break;
+    			case '10': dateValue.push('10'); break;
+    			case '11': dateValue.push('11'); break;
+    			case '12': dateValue.push('12'); break;
+  				default  : console.log('error'); break;
+  			}
+  			// 두개의 array속에 {"inagcat":"1"}, {"inagcat":"2"} 값을 각각 담아서 valueTotal array에 유효 전환값을 더한후 push
+  			var advSelect = data['adv_result_params'];
+  			switch (advSelect) {
+    			case '{"inagcat":"1"}': dateValue_1.push(data['COUNT(adv_result_params)']); break;
+    			case '{"inagcat":"2"}': dateValue_2.push(data['COUNT(adv_result_params)']); break;
+    			case '{"Carrot" :"1"}': dateValue_1.push(data['COUNT(adv_result_params)']); break;
+    			case '{"Carrot" :"2"}': dateValue_2.push(data['COUNT(adv_result_params)']); break;
+  				default               : console.log('error');                               break;
+  			}
+			});
+  		// Set의 특성을 사용하여 중복 제거
+  		var set       = new Set(dateValue);
+  		var uniqueArr = [...set];
+  		
+			if (dateValue_2 == 0) {
+    		for (var i = 0; i < dateValue_1.length; i++) {
+    			valueTotal.push(dateValue_1[i]);
+    		}
+			} else {
+    		// 유효전환값 1+2를 합쳐서 valueTotal array에 담는다.
+    		for (var i = 0; i < dateValue_1.length; i++) {
+    			valueTotal.push(dateValue_1[i] + dateValue_2[i]);
+    		}
+			}
+  		
+  		//*chart 관련 선언부*=====================================================
+  		var ctx = $('#myChart');
+  		$('#traffic-total-chart');
+  		var options = {}
+  		var mixedChart = new Chart(ctx, {
+  			type : 'bar',
+  			data : {
+  				datasets : [{
+  					label : '전환 TOTAL',
+  					data : trafficTotal,
+  					order : 2
+  				}, {
+  					label : '유효 전환',
+  					data : realTotal,
+  					type : 'line',
+  					backgroundColor : 'rgba(255, 255, 255, 0.1)',
+  					borderColor : '#4bc0c0',
+  					order : 1
+  				}],
+  				labels : chart
+  			},
+  			options : options
+  		});
+  		//====================================================================
+  		new Chart($('#pie-chart'), {
+  			type : 'pie',
+  			data : {
   				// switchingKey의 값에 따라 chart 변수에 대입 되는 값을 변환
-  				labels: chart,
-  				datasets: [{
-  					// switchingKey의 값에 따라 chartName 변수에 대입 되는 값을 변환
-  					label: chartName,
-  					// chart에 반영될 값
-  					data: trafficTotal,
-  					backgroundColor: [
-  						'rgba(179, 183, 187, 0.2)',
-  						'rgba(179, 183, 187, 0.2)',
-  						'rgba(179, 183, 187, 0.2)',
-  						'rgba(179, 183, 187, 0.2)',
-  						'rgba(179, 183, 187, 0.2)'
-  					],
-  					borderColor: [
-  						'rgba(88, 88, 88, 1)',
-  						'rgba(88, 88, 88, 1)',
-  						'rgba(88, 88, 88, 1)',
-  						'rgba(88, 88, 88, 1)',
-  						'rgba(88, 88, 88, 1)'
-  					],
-  					borderWidth: 1
+  				labels : chart,
+  				datasets : [{
+  					label : chartName,
+  					backgroundColor : [ '#3e95cd', '#8e5ea2', '#4bc0c0', '#e8c3b9', '#c45850' ],
+  					data : trafficTotal,
   				}]
   			},
-  			options: {
-  				responsive: false,
-  				scales: {
-  					y: {
-  						beginAtZero: true
-  					}
+  			options : {
+  				title : {
+  					display : true,
   				}
   			}
   		});
-  	//====================================================================
-  		const excelDownload = document.querySelector('#excelDownload');
-
-      document.addEventListener('DOMContentLoaded', () => {
-        excelDownload.addEventListener('click', exportExcel);
-      });
-      
-      function exportExcel(){ 
-        // step 1. workbook 생성
-        var wb = XLSX.utils.book_new();
-      
-        // step 2. 시트 만들기 
-        var newWorksheet = excelHandler.getWorksheet();
-      
-        // step 3. workbook에 새로만든 워크시트에 이름을 주고 붙인다.  
-        XLSX.utils.book_append_sheet(wb, newWorksheet, excelHandler.getSheetName());
-      
-        // step 4. 엑셀 파일 만들기 
-        var wbout = XLSX.write(wb, {bookType:'xlsx',  type: 'binary'});
-      
-        // step 5. 엑셀 파일 내보내기 
-        saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), excelHandler.getExcelFileName());
-      }
-      
-      var excelHandler = {
-          getExcelFileName : function(){
-              return day + ' traffic.xlsx';	//파일명
-          },
-          getSheetName : function(){
-              return 'Table Test Sheet';	//시트명
-          },
-          getExcelData : function(){
-              return document.getElementById('tableData'); 	//TABLE id
-          },
-          getWorksheet : function(){
-              return XLSX.utils.table_to_sheet(this.getExcelData());
-          }
-      }
-      
-      function s2ab(s) { 
-        var buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
-        var view = new Uint8Array(buf);  //create uint8array as viewer
-        for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
-        return buf;    
-      }
-		/*]]>*/
+  		//====================================================================
+  		var chart3 = $('#traffic-total-chart');
+  		var set = {
+  			label : campaignName,
+  			data : valueTotal,
+  			borderWidth : 1
+  		}
+  		var data = {
+  			labels : uniqueArr,
+  			datasets : [ set ]
+  		}
+  		var options2 = {
+  			maintainAspectRatio : false,//그래프의 비율 유지
+  			scales : {
+  				x : { //x축값 누적
+  					stacked : true
+  				},
+  				x : { //y축값 누적
+  					stacked : true
+  				},
+  			}
+  		}
+  		var _chart3 = new Chart(chart3, {
+  	    type: 'bar',
+  	    data: data,
+  	    options: options2
+  		});
+			//====================================================================
+	/*]]>*/
 	</script>
 </body>
 </html>
