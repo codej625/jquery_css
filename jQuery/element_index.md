@@ -33,5 +33,9 @@ ex)
       // color reset
       $('.click').css('background-color', 'white');
       $('.click').eq(indexNo).css('background-color', 'red');
+
+    // good       
+    // var i = $("button").index(this);        
+    // console.log(i);
     });
 ```
