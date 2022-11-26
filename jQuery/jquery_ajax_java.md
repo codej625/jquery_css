@@ -34,8 +34,8 @@ function phoneNumberChk() {
     public int selectPhoneNumber (HttpServletRequest request) throws Exception {
       
         log.info(">>> test selectPhoneNum => {}, {}>>>", request.getParameter("page"), request.getParameter("phone"));
-      
-        return 0;
+
+        return sservice.getTestFunction();
     }
 
 ```
