@@ -9,8 +9,6 @@ $('#id').click(function() {
   // ask => ture일시 실행
   if (ask) {
 
-    var fseq = seq;
-
     $.ajax({
       type: 'POST', // or 'GET'
       url: '/url',
