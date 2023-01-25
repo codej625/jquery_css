@@ -7,8 +7,9 @@ $.ajax({
   url  : '/',
 	type : "POST",
 	data : obj,
-	async: false, // 기본이 비동기(true)처리이고 동기(false)처리를 하려면 변경이 필요하다.
-	dataType: "json",
+	async: false, // default => 비동기(true)처리이고 동기(false)처리를 하려면 변경이 필요하다.
+	dataType: "json", // response data type(서버에서 어떤 타입으로 받을지)
+	contentType: 'application/json', //  default => application/x-www-form-urlencoded; charset=utf-8(request data type 어떤 데이터 타입으로 보낼지)
   beforeSend: ( xhr ) => {
     // ajax가 서버에 요청하기 전에 실행하는 로직
   },
